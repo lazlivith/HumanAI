@@ -1,49 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NC, FONT_CLASH, FONT_INTER } from '../../theme';
 import { NCCard, NCButton, NCSectionLabel, NCKpiCard, NCLineChart, NCDonutChart } from '../ui/SharedPrimitives';
 
 export function RHDashboard() {
   const kpis = [
-    { label: 'Total Employees', val: '248', sub: '+3 this month',        bars: [40,55,45,60,52,70,65,80,72,88] },
-    { label: 'Active Employees', val: '231', sub: '93.1% retention',     bars: [60,65,70,72,68,75,80,82,85,90] },
-    { label: 'On Leave Today',   val: '12',  sub: '4.8% of workforce',   bars: [8,12,6,14,10,9,12,15,11,12]   },
-    { label: 'Open Positions',   val: '17',  sub: '5 pending interviews', bars: [20,18,22,25,17,20,22,19,17,17] },
+    { label: 'Effectif Total', val: '248', sub: '+3 ce mois-ci',        bars: [40,55,45,60,52,70,65,80,72,88] },
+    { label: 'Rétention / Actifs', val: '93.1%', sub: '231 collaborateurs',     bars: [60,65,70,72,68,75,80,82,85,90] },
+    { label: 'Absences du jour',   val: '12',  sub: '4.8% de l\'effectif',   bars: [8,12,6,14,10,9,12,15,11,12]   },
+    { label: 'Recrutements',   val: '17',  sub: '5 entretiens prévus', bars: [20,18,22,25,17,20,22,19,17,17] },
   ];
 
-  const activities = [
-    { id: 'a1', time: '09:32', desc: 'New employee onboarded — Engineering' },
-    { id: 'a2', time: '10:15', desc: 'Leave request approved — Design' },
-    { id: 'a3', time: '11:00', desc: 'Performance review completed — Sales' },
-    { id: 'a4', time: '13:45', desc: 'Policy document updated — HR' },
-    { id: 'a5', time: '14:22', desc: 'Payroll cycle initiated — Finance' },
-  ];
+  // Données factices pour le Kanban
+  const initialKanbanState = {
+    todo: [
+      { id: 't1', name: 'Alice Dupont', role: 'Data Scientist', dept: 'Tech', dueDate: 'J-3' },
+      { id: 't2', name: 'Marc Lerois', role: 'Commercial', dept: 'Sales', dueDate: 'J-1' },
+    ],
+    inProgress: [
+      { id: 'p1', name: 'Yuki Tanaka', role: 'Développeur Frontend', dept: 'Tech', dueDate: 'Semaine 1' },
+    ],
+    done: [
+      { id: 'd1', name: 'Sara Mitchell', role: 'Marketing Manager', dept: 'Marketing', dueDate: 'Mois 1 validé' },
+      { id: 'd2', name: 'James Harlow', role: 'Développeur Senior', dept: 'Tech', dueDate: 'Intégré' },
+    ]
+  };
 
-  const events = [
-    { id: 'e1', date: 'Jun 5',  label: 'Timesheet submission deadline' },
-    { id: 'e2', date: 'Jun 10', label: 'Mid-year self-assessments due' },
-    { id: 'e3', date: 'Jun 12', label: 'Payroll approval window' },
-    { id: 'e4', date: 'Jun 15', label: 'Direct deposit processing' },
-    { id: 'e5', date: 'Jun 20', label: 'Engineering calibration session' },
-  ];
+  const [kanban, setKanban] = useState(initialKanbanState);
+
+  const getDeptColor = (dept: string) => {
+    switch(dept) {
+      case 'Tech': return { bg: '#E0F2FE', text: '#0284C7' };
+      case 'Sales': return { bg: '#FEF3C7', text: '#D97706' };
+      case 'Marketing': return { bg: '#FCE7F3', text: '#DB2777' };
+      default: return { bg: '#F1F5F9', text: '#475569' };
+    }
+  };
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', display: 'flex', flexDirection: 'column', gap: 24, backgroundColor: '#F8FAFC' }}>
+
+      {/* En-tête */}
+      <div style={{ marginBottom: 4 }}>
+        <h1 style={{ fontFamily: FONT_CLASH, fontSize: 26, fontWeight: 600, color: '#1E293B', margin: 0 }}>
+          Espace Ressources Humaines
+        </h1>
+        <p style={{ fontSize: 14, color: '#64748B', marginTop: 6 }}>
+          Indicateurs globaux et suivi des flux d'intégration.
+        </p>
+      </div>
 
       {/* Notification banner */}
       <NCCard style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderLeft: `3px solid ${NC.accent}` }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div className="mint-pulse" style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: NC.accent, flexShrink: 0 }} />
-          <span style={{ fontSize: 12, color: NC.fgDim }}>
-            You have{' '}
-            <span style={{ color: NC.navy, fontWeight: 600 }}>4 pending leave requests</span>
-            {' '}and{' '}
-            <span style={{ color: NC.navy, fontWeight: 600 }}>2 payroll corrections</span>
-            {' '}awaiting review.
+          <span style={{ fontSize: 13, color: NC.fgDim }}>
+            Vous avez{' '}
+            <span style={{ color: NC.navy, fontWeight: 600 }}>4 demandes de congés</span>
+            {' '}et{' '}
+            <span style={{ color: NC.navy, fontWeight: 600 }}>2 corrections de paie</span>
+            {' '}en attente de validation.
           </span>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <NCButton primary>Review Now</NCButton>
-          <NCButton>Dismiss</NCButton>
+          <NCButton primary>Traiter maintenant</NCButton>
+          <NCButton>Ignorer</NCButton>
         </div>
       </NCCard>
 
@@ -53,52 +73,103 @@ export function RHDashboard() {
       </div>
 
       {/* Charts row */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Headcount Trend" />
+          <NCSectionLabel label="Évolution des Effectifs" />
           <NCLineChart />
         </NCCard>
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Dept. Distribution" />
+          <NCSectionLabel label="Répartition par Département" />
           <NCDonutChart />
         </NCCard>
       </div>
 
-      {/* Bottom 2-col row */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-
-        <NCCard style={{ padding: 18 }}>
-          <NCSectionLabel label="Recent Activity" />
-          <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {activities.map((a) => (
-              <div key={a.id} style={{ display: 'flex', gap: 10 }}>
-                <span style={{ fontSize: 10, color: NC.mutedDim, flexShrink: 0, width: 36, paddingTop: 1 }}>{a.time}</span>
-                <div style={{ flex: 1, borderLeft: `2px solid ${NC.accentBorder}`, paddingLeft: 10 }}>
-                  <div style={{ fontSize: 11, color: NC.fgDim, lineHeight: 1.4 }}>{a.desc}</div>
-                </div>
-              </div>
-            ))}
-            <button data-cursor style={{ marginTop: 4, height: 28, border: `1px solid ${NC.border}`, borderRadius: 5, backgroundColor: 'transparent', fontSize: 11, color: NC.muted, cursor: 'none', width: '100%' }}>
-              View all
-            </button>
+      {/* Kanban Onboarding Row */}
+      <NCCard style={{ padding: 20, backgroundColor: '#FFFFFF', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <div>
+            <h3 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 600, color: '#1E293B', margin: 0 }}>Workflows d'Onboarding</h3>
+            <p style={{ fontSize: 13, color: '#64748B', margin: '4px 0 0 0' }}>Suivez l'intégration des nouveaux collaborateurs en temps réel.</p>
           </div>
-        </NCCard>
+          <button style={{ padding: '8px 16px', backgroundColor: '#01637A', color: '#FFFFFF', border: 'none', borderRadius: 6, fontSize: 13, fontWeight: 500, cursor: 'pointer' }}>
+            + Nouveau Dossier
+          </button>
+        </div>
 
-        <NCCard style={{ padding: 18 }}>
-          <NCSectionLabel label="Upcoming Events" />
-          <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {events.map((e, i) => (
-              <div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: 10, paddingBottom: 8, borderBottom: i < events.length - 1 ? `1px solid ${NC.borderDim}` : 'none' }}>
-                <div style={{ flexShrink: 0, border: `1px solid ${NC.accentBorder}`, borderRadius: 4, padding: '2px 6px', backgroundColor: NC.accentBg }}>
-                  <span style={{ fontSize: 9, color: NC.link, fontWeight: 600, whiteSpace: 'nowrap' }}>{e.date}</span>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, alignItems: 'flex-start' }}>
+          
+          {/* Colonne 1 : À faire */}
+          <div style={{ backgroundColor: '#F1F5F9', borderRadius: 8, padding: 16, minHeight: 300 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pré-boarding ({kanban.todo.length})</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {kanban.todo.map(card => (
+                <div key={card.id} style={{ backgroundColor: '#FFFFFF', padding: 16, borderRadius: 8, border: '1px solid #E2E8F0', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', cursor: 'grab' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: '#1E293B' }}>{card.name}</span>
+                    <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: 10, fontWeight: 600, backgroundColor: getDeptColor(card.dept).bg, color: getDeptColor(card.dept).text }}>{card.dept}</span>
+                  </div>
+                  <div style={{ fontSize: 12, color: '#64748B', marginBottom: 12 }}>{card.role}</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 11, color: '#EF4444', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#EF4444' }}></div> {card.dueDate}
+                    </span>
+                    <button style={{ background: 'none', border: 'none', color: '#01637A', fontSize: 12, fontWeight: 500, cursor: 'pointer', padding: 0 }}>Démarrer</button>
+                  </div>
                 </div>
-                <span style={{ fontSize: 11, color: NC.muted, flex: 1, lineHeight: 1.3 }}>{e.label}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </NCCard>
 
-      </div>
+          {/* Colonne 2 : En cours */}
+          <div style={{ backgroundColor: '#F1F5F9', borderRadius: 8, padding: 16, minHeight: 300 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>En cours ({kanban.inProgress.length})</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {kanban.inProgress.map(card => (
+                <div key={card.id} style={{ backgroundColor: '#FFFFFF', padding: 16, borderRadius: 8, border: '1px solid #E2E8F0', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', cursor: 'grab', borderLeft: '3px solid #EE7836' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: '#1E293B' }}>{card.name}</span>
+                    <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: 10, fontWeight: 600, backgroundColor: getDeptColor(card.dept).bg, color: getDeptColor(card.dept).text }}>{card.dept}</span>
+                  </div>
+                  <div style={{ fontSize: 12, color: '#64748B', marginBottom: 12 }}>{card.role}</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 11, color: '#F59E0B', fontWeight: 600 }}>{card.dueDate}</span>
+                    <button style={{ background: 'none', border: 'none', color: '#01637A', fontSize: 12, fontWeight: 500, cursor: 'pointer', padding: 0 }}>Continuer</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Colonne 3 : Terminé */}
+          <div style={{ backgroundColor: '#F1F5F9', borderRadius: 8, padding: 16, minHeight: 300 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Terminé ({kanban.done.length})</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {kanban.done.map(card => (
+                <div key={card.id} style={{ backgroundColor: '#FFFFFF', padding: 16, borderRadius: 8, border: '1px solid #E2E8F0', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', cursor: 'grab', borderLeft: '3px solid #22C55E' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: '#1E293B' }}>{card.name}</span>
+                    <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: 10, fontWeight: 600, backgroundColor: getDeptColor(card.dept).bg, color: getDeptColor(card.dept).text }}>{card.dept}</span>
+                  </div>
+                  <div style={{ fontSize: 12, color: '#64748B', marginBottom: 12 }}>{card.role}</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 11, color: '#22C55E', fontWeight: 600 }}>{card.dueDate}</span>
+                    <span style={{ color: '#22C55E' }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </NCCard>
+
     </div>
   );
 }
+
