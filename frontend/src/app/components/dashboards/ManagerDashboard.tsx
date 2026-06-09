@@ -9,17 +9,26 @@ export function ManagerDashboard() {
     { label: 'Charge de travail', val: '82%', sub: 'Risque de surcharge modéré', bars: [100,100,100,0,0,0,0,0,0,0], customColor: '#EE7836' },
   ];
 
-  const teamMembers = [
+  const [teamMembers, setTeamMembers] = useState([
     { id: 1, name: 'Sophie Martin', role: 'UX Designer', status: 'Présent', statusColor: '#22C55E', pendingLeave: false },
     { id: 2, name: 'Lucas Dubois', role: 'Développeur Front', status: 'Télétravail', statusColor: '#01637A', pendingLeave: false },
     { id: 3, name: 'Amine Khelil', role: 'Développeur Back', status: 'En congé', statusColor: '#94A3B8', pendingLeave: false },
     { id: 4, name: 'Emma Roy', role: 'Product Manager', status: 'Présent', statusColor: '#22C55E', pendingLeave: true },
-  ];
+  ]);
 
-  const predictiveRisks = [
+  const [predictiveRisks, setPredictiveRisks] = useState([
     { id: 1, name: 'Thomas Girard', riskType: 'Risque de burnout détecté', score: 78, triggers: ['Heures supplémentaires +30%', 'Emails tardifs'], action: 'Planifier un entretien de suivi' },
     { id: 2, name: 'Julie Blanc', riskType: 'Baisse d\'engagement', score: 45, triggers: ['Arrêts maladie répétés', 'Retards de livraison'], action: 'Ajuster la charge de travail' },
-  ];
+  ]);
+
+  const handleLeaveAction = (id: number) => {
+    setTeamMembers(teamMembers.map(m => m.id === id ? { ...m, pendingLeave: false } : m));
+  };
+
+  const handleRiskAction = (id: number) => {
+    alert("Action déclenchée via l'assistant IA ! Un brouillon d'email a été préparé.");
+    setPredictiveRisks(predictiveRisks.filter(r => r.id !== id));
+  };
 
   return (
     <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', display: 'flex', flexDirection: 'column', gap: 24, backgroundColor: '#F8FAFC' }}>
@@ -80,8 +89,8 @@ export function ManagerDashboard() {
                     <td style={{ padding: '14px 16px', textAlign: 'right' }}>
                       {member.pendingLeave ? (
                         <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-                          <button style={{ padding: '6px 12px', fontSize: 12, borderRadius: 6, border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', color: '#EF4444', cursor: 'pointer', fontWeight: 500 }}>Refuser</button>
-                          <button style={{ padding: '6px 12px', fontSize: 12, borderRadius: 6, border: 'none', backgroundColor: '#01637A', color: '#FFFFFF', cursor: 'pointer', fontWeight: 500 }}>Valider (Congé)</button>
+                          <button onClick={() => handleLeaveAction(member.id)} style={{ padding: '6px 12px', fontSize: 12, borderRadius: 6, border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', color: '#EF4444', cursor: 'pointer', fontWeight: 500 }}>Refuser</button>
+                          <button onClick={() => handleLeaveAction(member.id)} style={{ padding: '6px 12px', fontSize: 12, borderRadius: 6, border: 'none', backgroundColor: '#01637A', color: '#FFFFFF', cursor: 'pointer', fontWeight: 500 }}>Valider (Congé)</button>
                         </div>
                       ) : (
                         <span style={{ fontSize: 12, color: '#94A3B8', fontStyle: 'italic' }}>À jour</span>
@@ -124,7 +133,7 @@ export function ManagerDashboard() {
                     <span style={{ fontSize: 12, fontWeight: 600, color: '#C2410C' }}>Suggestion : {risk.action}</span>
                   </div>
                 </div>
-                <button style={{ padding: '8px 16px', backgroundColor: '#EA580C', color: '#FFFFFF', border: 'none', borderRadius: 6, fontSize: 13, fontWeight: 500, cursor: 'pointer', alignSelf: 'center' }}>
+                <button onClick={() => handleRiskAction(risk.id)} style={{ padding: '8px 16px', backgroundColor: '#EA580C', color: '#FFFFFF', border: 'none', borderRadius: 6, fontSize: 13, fontWeight: 500, cursor: 'pointer', alignSelf: 'center' }}>
                   Agir
                 </button>
               </div>
