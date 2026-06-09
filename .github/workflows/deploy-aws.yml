@@ -1,0 +1,79 @@
+name: 🚀 Deploy — AWS S3 + CloudFront
+
+on:
+  push:
+    branches: [main]   # Déploiement automatique uniquement sur main
+
+env:
+  AWS_REGION: eu-west-3          # Paris — à adapter selon votre choix AWS
+  S3_BUCKET: humai-frontend-prod # Nom du bucket S3 (à créer dans AWS)
+  CLOUDFRONT_DIST_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+
+jobs:
+  deploy:
+    name: Build & Deploy to AWS
+    runs-on: ubuntu-latest
+    environment: production       # Environnement GitHub protégé (review manuelle possible)
+
+    steps:
+      # 1. Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Node.js setup
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # 3. Install
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./frontend
+
+      # 4. Environment de production
+      - name: Create production .env
+        working-directory: ./frontend
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL_PROD }}" >> .env
+          echo "VITE_APP_ENV=production" >> .env
+          echo "VITE_APP_NAME=HUMAI HR Platform" >> .env
+          echo "VITE_SENTRY_DSN=${{ secrets.VITE_SENTRY_DSN }}" >> .env
+
+      # 5. Build de production
+      - name: Build production bundle
+        run: npm run build
+        working-directory: ./frontend
+
+      # 6. Authentification AWS via OIDC (plus sécurisé que les access keys statiques)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # 7. Sync vers S3 (--delete supprime les anciens fichiers non utilisés)
+      - name: Deploy to S3
+        run: |
+          aws s3 sync frontend/dist/ s3://${{ env.S3_BUCKET }} \
+            --delete \
+            --cache-control "max-age=31536000" \
+            --exclude "index.html"
+
+          # index.html ne doit PAS être mis en cache pour toujours (SPA routing)
+          aws s3 cp frontend/dist/index.html s3://${{ env.S3_BUCKET }}/index.html \
+            --cache-control "no-cache, no-store, must-revalidate"
+
+      # 8. Invalider le cache CloudFront pour que les utilisateurs voient la nouvelle version
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CLOUDFRONT_DIST_ID }} \
+            --paths "/*"
+
+      # 9. Notifier le succès du déploiement
+      - name: Deployment summary
+        run: |
+          echo "✅ Deployment successful!"
+          echo "🌐 Application URL: https://$(aws cloudfront get-distribution --id ${{ env.CLOUDFRONT_DIST_ID }} --query 'Distribution.DomainName' --output text)"

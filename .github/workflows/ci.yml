@@ -1,0 +1,51 @@
+name: 🔍 CI — Build & Quality Check
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    name: Build & Verify
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js (LTS)
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./frontend
+
+      # 4. Create .env for build (uses GitHub Secrets for non-sensitive values)
+      - name: Create .env file
+        working-directory: ./frontend
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
+          echo "VITE_APP_ENV=staging" >> .env
+          echo "VITE_APP_NAME=HUMAI HR Platform" >> .env
+          echo "VITE_SENTRY_DSN=${{ secrets.VITE_SENTRY_DSN }}" >> .env
+
+      # 5. Build the production bundle
+      - name: Build production bundle
+        run: npm run build
+        working-directory: ./frontend
+
+      # 6. Upload build artifacts (for use in deploy job)
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 7
