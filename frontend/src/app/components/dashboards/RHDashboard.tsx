@@ -26,6 +26,7 @@ export function RHDashboard() {
   };
 
   const [kanban, setKanban] = useState(initialKanbanState);
+  const [showBanner, setShowBanner] = useState(true);
 
   const getDeptColor = (dept: string) => {
     switch(dept) {
@@ -34,6 +35,22 @@ export function RHDashboard() {
       case 'Marketing': return { bg: '#FCE7F3', text: '#DB2777' };
       default: return { bg: '#F1F5F9', text: '#475569' };
     }
+  };
+
+  const moveCard = (id: string, from: 'todo' | 'inProgress', to: 'inProgress' | 'done') => {
+    const cardToMove = kanban[from].find(c => c.id === id);
+    if (cardToMove) {
+      setKanban({
+        ...kanban,
+        [from]: kanban[from].filter(c => c.id !== id),
+        [to]: [...kanban[to], { ...cardToMove, dueDate: to === 'inProgress' ? 'En cours' : 'Terminé' }]
+      });
+    }
+  };
+
+  const handleNewDossier = () => {
+    const newCard = { id: `t${Date.now()}`, name: 'Nouveau Talent', role: 'À définir', dept: 'Tech', dueDate: 'J-15' };
+    setKanban({ ...kanban, todo: [...kanban.todo, newCard] });
   };
 
   return (
@@ -50,22 +67,24 @@ export function RHDashboard() {
       </div>
 
       {/* Notification banner */}
-      <NCCard style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderLeft: `3px solid ${NC.accent}` }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div className="mint-pulse" style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: NC.accent, flexShrink: 0 }} />
-          <span style={{ fontSize: 13, color: NC.fgDim }}>
-            Vous avez{' '}
-            <span style={{ color: NC.navy, fontWeight: 600 }}>4 demandes de congés</span>
-            {' '}et{' '}
-            <span style={{ color: NC.navy, fontWeight: 600 }}>2 corrections de paie</span>
-            {' '}en attente de validation.
-          </span>
-        </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <NCButton primary>Traiter maintenant</NCButton>
-          <NCButton>Ignorer</NCButton>
-        </div>
-      </NCCard>
+      {showBanner && (
+        <NCCard style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderLeft: `3px solid ${NC.accent}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div className="mint-pulse" style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: NC.accent, flexShrink: 0 }} />
+            <span style={{ fontSize: 13, color: NC.fgDim }}>
+              Vous avez{' '}
+              <span style={{ color: NC.navy, fontWeight: 600 }}>4 demandes de congés</span>
+              {' '}et{' '}
+              <span style={{ color: NC.navy, fontWeight: 600 }}>2 corrections de paie</span>
+              {' '}en attente de validation.
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <div onClick={() => { alert('Redirection vers le centre de validation...'); setShowBanner(false); }}><NCButton primary>Traiter maintenant</NCButton></div>
+            <div onClick={() => setShowBanner(false)}><NCButton>Ignorer</NCButton></div>
+          </div>
+        </NCCard>
+      )}
 
       {/* KPI row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
@@ -91,7 +110,7 @@ export function RHDashboard() {
             <h3 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 600, color: '#1E293B', margin: 0 }}>Workflows d'Onboarding</h3>
             <p style={{ fontSize: 13, color: '#64748B', margin: '4px 0 0 0' }}>Suivez l'intégration des nouveaux collaborateurs en temps réel.</p>
           </div>
-          <button style={{ padding: '8px 16px', backgroundColor: '#01637A', color: '#FFFFFF', border: 'none', borderRadius: 6, fontSize: 13, fontWeight: 500, cursor: 'pointer' }}>
+          <button onClick={handleNewDossier} style={{ padding: '8px 16px', backgroundColor: '#01637A', color: '#FFFFFF', border: 'none', borderRadius: 6, fontSize: 13, fontWeight: 500, cursor: 'pointer' }}>
             + Nouveau Dossier
           </button>
         </div>
@@ -115,7 +134,7 @@ export function RHDashboard() {
                     <span style={{ fontSize: 11, color: '#EF4444', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
                       <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#EF4444' }}></div> {card.dueDate}
                     </span>
-                    <button style={{ background: 'none', border: 'none', color: '#01637A', fontSize: 12, fontWeight: 500, cursor: 'pointer', padding: 0 }}>Démarrer</button>
+                    <button onClick={() => moveCard(card.id, 'todo', 'inProgress')} style={{ background: 'none', border: 'none', color: '#01637A', fontSize: 12, fontWeight: 500, cursor: 'pointer', padding: 0 }}>Démarrer</button>
                   </div>
                 </div>
               ))}
@@ -137,7 +156,7 @@ export function RHDashboard() {
                   <div style={{ fontSize: 12, color: '#64748B', marginBottom: 12 }}>{card.role}</div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: 11, color: '#F59E0B', fontWeight: 600 }}>{card.dueDate}</span>
-                    <button style={{ background: 'none', border: 'none', color: '#01637A', fontSize: 12, fontWeight: 500, cursor: 'pointer', padding: 0 }}>Continuer</button>
+                    <button onClick={() => moveCard(card.id, 'inProgress', 'done')} style={{ background: 'none', border: 'none', color: '#01637A', fontSize: 12, fontWeight: 500, cursor: 'pointer', padding: 0 }}>Continuer</button>
                   </div>
                 </div>
               ))}
