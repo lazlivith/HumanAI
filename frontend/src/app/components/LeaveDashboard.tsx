@@ -31,19 +31,19 @@ export function LeaveDashboard() {
   const { user } = useAuth();
   const isCollaborateur = user?.role === 'Collaborateur';
   const requests = [
-    { id: 'LV-001', name: 'Maria Lopez', type: 'Annual Leave', from: '2026-06-10', to: '2026-06-14', days: 5, status: 'Pending' },
-    { id: 'LV-002', name: 'Robert Smith', type: 'Sick Leave', from: '2026-06-03', to: '2026-06-03', days: 1, status: 'Approved' },
-    { id: 'LV-003', name: 'Jennifer Wu', type: 'Personal', from: '2026-06-08', to: '2026-06-09', days: 2, status: 'Pending' },
-    { id: 'LV-004', name: 'Lisa Taylor', type: 'Annual Leave', from: '2026-06-20', to: '2026-06-28', days: 7, status: 'Approved' },
-    { id: 'LV-005', name: 'David Osei', type: 'Annual Leave', from: '2026-06-01', to: '2026-06-07', days: 5, status: 'Active' },
-    { id: 'LV-006', name: 'Carlos Rivera', type: 'Emergency', from: '2026-06-05', to: '2026-06-05', days: 1, status: 'Pending' },
+    { id: 'LV-001', name: 'Maria Lopez', type: 'Congés Payés', from: '2026-06-10', to: '2026-06-14', days: 5, status: 'En attente' },
+    { id: 'LV-002', name: 'Robert Smith', type: 'Arrêt Maladie', from: '2026-06-03', to: '2026-06-03', days: 1, status: 'Approuvé' },
+    { id: 'LV-003', name: 'Jennifer Wu', type: 'Congé Personnel', from: '2026-06-08', to: '2026-06-09', days: 2, status: 'En attente' },
+    { id: 'LV-004', name: 'Lisa Taylor', type: 'Congés Payés', from: '2026-06-20', to: '2026-06-28', days: 7, status: 'Approuvé' },
+    { id: 'LV-005', name: 'David Osei', type: 'Congés Payés', from: '2026-06-01', to: '2026-06-07', days: 5, status: 'Actif' },
+    { id: 'LV-006', name: 'Carlos Rivera', type: 'Urgence', from: '2026-06-05', to: '2026-06-05', days: 1, status: 'En attente' },
   ];
 
   const history = [
-    { name: 'James Harlow', type: 'Annual Leave', dates: 'Apr 15–19', days: 5, approved: 'HR Admin' },
-    { name: 'Sara Mitchell', type: 'Sick Leave', dates: 'May 2', days: 1, approved: 'Line Mgr' },
-    { name: 'Priya Nair', type: 'Personal', dates: 'May 14–15', days: 2, approved: 'HR Admin' },
-    { name: 'Yuki Tanaka', type: 'Annual Leave', dates: 'May 26–30', days: 5, approved: 'Line Mgr' },
+    { name: 'James Harlow', type: 'Congés Payés', dates: '15–19 Avr', days: 5, approved: 'Admin RH' },
+    { name: 'Sara Mitchell', type: 'Arrêt Maladie', dates: '2 Mai', days: 1, approved: 'Manager' },
+    { name: 'Priya Nair', type: 'Congé Personnel', dates: '14–15 Mai', days: 2, approved: 'Admin RH' },
+    { name: 'Yuki Tanaka', type: 'Congés Payés', dates: '26–30 Mai', days: 5, approved: 'Manager' },
   ];
 
   const leaveDays: Record<number, string> = {
@@ -58,23 +58,23 @@ export function LeaveDashboard() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Leave Management</h2>
-          <p style={{ fontSize: 11, color: NC.muted }}>Manage leave requests, balances, and approval workflows</p>
+          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Gestion des Congés</h2>
+          <p style={{ fontSize: 11, color: NC.muted }}>Gérez les demandes de congés, les soldes et les workflows d'approbation</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <NCButton>Export Report</NCButton>
-          <NCButton primary>+ Request Leave</NCButton>
+          <NCButton>Exporter le rapport</NCButton>
+          <NCButton primary>+ Demander un congé</NCButton>
         </div>
       </div>
 
       {/* Leave balance cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
         {[
-          { label: 'Annual Leave', used: 8, total: 20 },
-          { label: 'Sick Leave', used: 2, total: 10 },
-          { label: 'Personal Days', used: 1, total: 5 },
-          { label: 'Remote Days', used: 24, total: 60 },
-          { label: 'Pending Requests', used: 4, total: null },
+          { label: 'Congés Payés', used: 8, total: 20 },
+          { label: 'Arrêt Maladie', used: 2, total: 10 },
+          { label: 'Jours Personnels', used: 1, total: 5 },
+          { label: 'Télétravail', used: 24, total: 60 },
+          { label: 'En attente', used: 4, total: null },
         ].map((b) => (
           <NCCard key={b.label} style={{ padding: '18px 20px' }}>
             <div style={{ fontSize: 10, color: NC.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{b.label}</div>
@@ -82,7 +82,7 @@ export function LeaveDashboard() {
               {b.total !== null ? `${b.total - b.used}` : b.used}
             </div>
             <div style={{ fontSize: 10, color: NC.mutedDim, marginBottom: 12 }}>
-              {b.total !== null ? `${b.used} used / ${b.total} total` : 'awaiting review'}
+              {b.total !== null ? `${b.used} pris / ${b.total} total` : 'en attente de validation'}
             </div>
             {b.total !== null && (
               <div style={{ height: 5, width: '100%', backgroundColor: NC.accentBg, borderRadius: 3, position: 'relative', overflow: 'hidden' }}>
@@ -99,7 +99,7 @@ export function LeaveDashboard() {
         {/* Calendar view */}
         <NCCard style={{ padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>June 2026 — Leave Calendar</span>
+            <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Juin 2026 — Calendrier</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <button data-cursor style={{ width: 26, height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 14, color: NC.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>‹</button>
               <button data-cursor style={{ width: 26, height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 14, color: NC.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>›</button>
@@ -108,7 +108,7 @@ export function LeaveDashboard() {
 
           {/* Day headers */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
-            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => (
+            {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map((d) => (
               <div key={d} style={{ textAlign: 'center', fontSize: 10, color: NC.mutedDim, padding: 4 }}>{d}</div>
             ))}
           </div>
@@ -140,10 +140,10 @@ export function LeaveDashboard() {
           {/* Legend */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 16, paddingTop: 14, borderTop: `1px solid ${NC.border}` }}>
             {[
-              { label: 'Active Leave', bg: NC.accentBg, border: NC.accentBorder },
-              { label: 'Approved', bg: NC.accentBg, border: NC.accentBorder },
-              { label: 'Pending', bg: '#F9FAFB', border: NC.mutedDim },
-              { label: 'Available', bg: 'transparent', border: NC.borderDim },
+              { label: 'Congé Actif', bg: NC.accentBg, border: NC.accentBorder },
+              { label: 'Approuvé', bg: NC.accentBg, border: NC.accentBorder },
+              { label: 'En attente', bg: '#F9FAFB', border: NC.mutedDim },
+              { label: 'Disponible', bg: 'transparent', border: NC.borderDim },
             ].map((l) => (
               <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <div style={{ width: 12, height: 12, backgroundColor: l.bg, border: `1px solid ${l.border}`, borderRadius: 3 }} />
@@ -157,13 +157,13 @@ export function LeaveDashboard() {
         {!isCollaborateur && (
         <NCCard style={{ padding: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Pending Approvals</span>
+            <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Demandes à Valider</span>
             <div style={{ width: 24, height: 24, borderRadius: '50%', background: BTN_GRADIENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <span style={{ fontSize: 11, color: '#FFFFFF', fontWeight: 600 }}>3</span>
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {requests.filter((r) => r.status === 'Pending').map((req) => (
+            {requests.filter((r) => r.status === 'En attente' || r.status === 'Pending').map((req) => (
               <div key={req.id} style={{ border: `1px solid ${NC.border}`, borderRadius: 8, padding: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: 30, height: 30, borderRadius: '50%', border: `1.5px solid ${NC.border}`, backgroundColor: NC.accentBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -173,13 +173,13 @@ export function LeaveDashboard() {
                     <div style={{ fontSize: 11, color: NC.fg, fontWeight: 500 }}>{req.name}</div>
                     <div style={{ fontSize: 10, color: NC.mutedDim }}>{req.type}</div>
                   </div>
-                  <div style={{ fontSize: 11, color: NC.fgDim, fontWeight: 600 }}>{req.days}d</div>
+                  <div style={{ fontSize: 11, color: NC.fgDim, fontWeight: 600 }}>{req.days}j</div>
                 </div>
                 <div style={{ height: 1, backgroundColor: NC.borderDim }} />
                 <div style={{ fontSize: 10, color: NC.muted }}>{req.from} → {req.to}</div>
                 <div style={{ display: 'flex', gap: 6 }}>
-                  <NCButton primary>Approve</NCButton>
-                  <NCButton>Decline</NCButton>
+                  <NCButton primary>Approuver</NCButton>
+                  <NCButton>Refuser</NCButton>
                 </div>
               </div>
             ))}
@@ -192,13 +192,13 @@ export function LeaveDashboard() {
       {!isCollaborateur && (
       <NCCard style={{ padding: 0 }}>
         <div style={{ borderBottom: `1px solid ${NC.border}`, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>All Leave Requests</span>
+          <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Toutes les Demandes</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, height: 32, padding: '0 12px', gap: 8, width: 180 }}>
               <div style={{ width: 11, height: 11, borderRadius: '50%', border: `1.5px solid ${NC.mutedDim}` }} />
-              <span style={{ fontSize: 11, color: NC.mutedDim }}>Search...</span>
+              <span style={{ fontSize: 11, color: NC.mutedDim }}>Rechercher...</span>
             </div>
-            {['Type', 'Status', 'Period'].map((f) => (
+            {['Type', 'Statut', 'Période'].map((f) => (
               <button key={f} data-cursor style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}>
                 <span style={{ fontSize: 11, color: NC.muted }}>{f}</span>
                 <div style={{ width: 0, height: 0, borderLeft: '3px solid transparent', borderRight: '3px solid transparent', borderTop: `4px solid ${NC.muted}` }} />
@@ -209,7 +209,7 @@ export function LeaveDashboard() {
         <table style={{ width: '100%' }}>
           <thead style={{ borderBottom: `1px solid ${NC.border}`, backgroundColor: NC.bg }}>
             <tr>
-              {['ID', 'Employee', 'Type', 'From', 'To', 'Days', 'Status', 'Actions'].map((h) => (
+              {['ID', 'Employé', 'Type', 'Début', 'Fin', 'Jours', 'Statut', 'Actions'].map((h) => (
                 <th key={h} style={{ textAlign: 'left', padding: 16, fontSize: 10, color: NC.muted, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>{h}</th>
               ))}
             </tr>
@@ -229,10 +229,10 @@ export function LeaveDashboard() {
                 <td style={{ padding: 16, fontSize: 11, color: NC.muted }}>{r.type}</td>
                 <td style={{ padding: 16, fontSize: 11, color: NC.muted }}>{r.from}</td>
                 <td style={{ padding: 16, fontSize: 11, color: NC.muted }}>{r.to}</td>
-                <td style={{ padding: 16, fontSize: 11, color: NC.fgDim, fontWeight: 600 }}>{r.days}d</td>
+                <td style={{ padding: 16, fontSize: 11, color: NC.fgDim, fontWeight: 600 }}>{r.days}j</td>
                 <td style={{ padding: 16 }}><LeaveBadge status={r.status} /></td>
                 <td style={{ padding: 16 }}>
-                  <button data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>View</button>
+                  <button data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>Voir</button>
                 </td>
               </tr>
             ))}
@@ -243,7 +243,7 @@ export function LeaveDashboard() {
 
       {/* Leave history */}
       <NCCard style={{ padding: 20 }}>
-        <NCSectionLabel label="Leave History" />
+        <NCSectionLabel label="Historique des Congés" />
         <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
           {history.map((h) => (
             <div key={h.name} style={{ border: `1px solid ${NC.border}`, borderRadius: 8, padding: 14 }}>
@@ -254,8 +254,8 @@ export function LeaveDashboard() {
                 <div style={{ fontSize: 11, color: NC.fg, fontWeight: 500 }}>{h.name}</div>
               </div>
               <div style={{ fontSize: 11, color: NC.muted, marginBottom: 2 }}>{h.type}</div>
-              <div style={{ fontSize: 10, color: NC.mutedDim, marginBottom: 2 }}>{h.dates} · {h.days}d</div>
-              <div style={{ fontSize: 10, color: NC.mutedDim }}>Approved by {h.approved}</div>
+              <div style={{ fontSize: 10, color: NC.mutedDim, marginBottom: 2 }}>{h.dates} · {h.days}j</div>
+              <div style={{ fontSize: 10, color: NC.mutedDim }}>Approuvé par {h.approved}</div>
             </div>
           ))}
         </div>
@@ -281,18 +281,18 @@ function NCSectionLabel({ label }: { label: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>{label}</span>
-      <button data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>See all</button>
+      <button data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Voir tout</button>
     </div>
   );
 }
 
 function LeaveBadge({ status }: { status: string }) {
   const styles: Record<string, { bg: string; border: string; color: string }> = {
-    Approved: { bg: NC.greenBg, border: NC.green, color: NC.green },
-    Pending: { bg: NC.amberBg, border: NC.amber, color: NC.amber },
-    Active: { bg: NC.accentBg, border: NC.accentBorder, color: NC.link },
-    Declined: { bg: NC.redBg, border: NC.red, color: NC.red },
+    Approuvé: { bg: NC.greenBg, border: NC.green, color: NC.green },
+    'En attente': { bg: NC.amberBg, border: NC.amber, color: NC.amber },
+    Actif: { bg: NC.accentBg, border: NC.accentBorder, color: NC.link },
+    Refusé: { bg: NC.redBg, border: NC.red, color: NC.red },
   };
-  const s = styles[status] ?? styles.Pending;
+  const s = styles[status] ?? styles['En attente'];
   return <span style={{ display: 'inline-block', padding: '3px 8px', fontSize: 10, backgroundColor: s.bg, border: `1px solid ${s.border}`, borderRadius: 4, color: s.color, fontWeight: 600 }}>{status}</span>;
 }
