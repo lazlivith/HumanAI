@@ -1,4 +1,5 @@
 // Performance Dashboard
+import React from 'react';
 
 const NC = {
   bg:           '#EDF2F7',
@@ -26,30 +27,30 @@ const FONT_CLASH = "'Neue Montreal', 'Clash Display', sans-serif";
 
 export function PerformanceDashboard() {
   const reviews = [
-    { name: 'James Harlow', dept: 'Engineering', role: 'Senior Developer', score: 4.7, trend: '+0.3', cycle: 'Q2 2026', status: 'Completed', reviewer: 'Sarah Chen' },
-    { name: 'Sara Mitchell', dept: 'Marketing', role: 'Marketing Manager', score: 4.2, trend: '+0.1', cycle: 'Q2 2026', status: 'In Review', reviewer: 'David Kim' },
-    { name: 'David Osei', dept: 'Design', role: 'UI/UX Designer', score: 4.5, trend: '+0.4', cycle: 'Q2 2026', status: 'Completed', reviewer: 'Maria Lopez' },
-    { name: 'Priya Nair', dept: 'HR', role: 'HR Specialist', score: 4.1, trend: '—', cycle: 'Q2 2026', status: 'Scheduled', reviewer: 'Robert Smith' },
-    { name: 'Carlos Rivera', dept: 'Sales', role: 'Sales Rep', score: 3.8, trend: '-0.2', cycle: 'Q2 2026', status: 'In Review', reviewer: 'Jennifer Wu' },
-    { name: 'Yuki Tanaka', dept: 'Engineering', role: 'Frontend Developer', score: 4.6, trend: '+0.5', cycle: 'Q2 2026', status: 'Completed', reviewer: 'Sarah Chen' },
-    { name: 'Tom Brennan', dept: 'Operations', role: 'Ops Manager', score: 4.0, trend: '+0.2', cycle: 'Q2 2026', status: 'Scheduled', reviewer: 'Lisa Taylor' },
+    { name: 'James Harlow', dept: 'Ingénierie', role: 'Développeur Senior', score: 4.7, trend: '+0.3', cycle: 'Q2 2026', status: 'Terminé', reviewer: 'Sarah Chen' },
+    { name: 'Sara Mitchell', dept: 'Marketing', role: 'Responsable Marketing', score: 4.2, trend: '+0.1', cycle: 'Q2 2026', status: 'En revue', reviewer: 'David Kim' },
+    { name: 'David Osei', dept: 'Design', role: 'Designer UI/UX', score: 4.5, trend: '+0.4', cycle: 'Q2 2026', status: 'Terminé', reviewer: 'Maria Lopez' },
+    { name: 'Priya Nair', dept: 'RH', role: 'Spécialiste RH', score: 4.1, trend: '—', cycle: 'Q2 2026', status: 'Programmé', reviewer: 'Robert Smith' },
+    { name: 'Carlos Rivera', dept: 'Ventes', role: 'Commercial', score: 3.8, trend: '-0.2', cycle: 'Q2 2026', status: 'En revue', reviewer: 'Jennifer Wu' },
+    { name: 'Yuki Tanaka', dept: 'Ingénierie', role: 'Développeur Frontend', score: 4.6, trend: '+0.5', cycle: 'Q2 2026', status: 'Terminé', reviewer: 'Sarah Chen' },
+    { name: 'Tom Brennan', dept: 'Opérations', role: 'Directeur Ops', score: 4.0, trend: '+0.2', cycle: 'Q2 2026', status: 'Programmé', reviewer: 'Lisa Taylor' },
   ];
 
   const competencies = [
     { label: 'Communication', avg: 4.3 },
-    { label: 'Technical Skills', avg: 4.6 },
+    { label: 'Compétences Techniques', avg: 4.6 },
     { label: 'Collaboration', avg: 4.1 },
     { label: 'Leadership', avg: 3.9 },
     { label: 'Innovation', avg: 4.0 },
-    { label: 'Delivery', avg: 4.4 },
+    { label: 'Livraison', avg: 4.4 },
   ];
 
   const distribution = [
-    { label: 'Exceptional (5)', count: 28, pct: 11 },
-    { label: 'Exceeds (4-4.9)', count: 112, pct: 45 },
-    { label: 'Meets (3-3.9)', count: 81, pct: 33 },
-    { label: 'Below (2-2.9)', count: 22, pct: 9 },
-    { label: 'Unsatisfactory (<2)', count: 5, pct: 2 },
+    { label: 'Exceptionnel (5)', count: 28, pct: 11 },
+    { label: 'Dépasse (4-4.9)', count: 112, pct: 45 },
+    { label: 'Atteint (3-3.9)', count: 81, pct: 33 },
+    { label: 'En dessous (2-2.9)', count: 22, pct: 9 },
+    { label: 'Insatisfaisant (<2)', count: 5, pct: 2 },
   ];
 
   return (
@@ -58,22 +59,26 @@ export function PerformanceDashboard() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Performance Management</h2>
-          <p style={{ fontSize: 11, color: NC.muted }}>Track employee evaluations, ratings, and performance cycles</p>
+          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Gestion des Performances</h2>
+          <p style={{ fontSize: 11, color: NC.muted }}>Suivez les évaluations, les notations et les cycles de performance des employés</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <NCButton>Export Reviews</NCButton>
-          <NCButton primary>+ Start Review Cycle</NCButton>
+          <div onClick={() => alert('Exportation des évaluations en cours...')}>
+            <NCButton>Exporter les évaluations</NCButton>
+          </div>
+          <div onClick={() => alert('Ouverture du module de création d\'un nouveau cycle...')}>
+            <NCButton primary>+ Lancer un cycle</NCButton>
+          </div>
         </div>
       </div>
 
       {/* KPI cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
         {[
-          { label: 'Avg. Score', val: '4.2', sub: 'Q2 2026' },
-          { label: 'Reviews Completed', val: '148', sub: '60% of staff' },
-          { label: 'In Progress', val: '62', sub: '25% of staff' },
-          { label: 'Not Started', val: '38', sub: '15% of staff' },
+          { label: 'Score Moyen', val: '4.2', sub: 'T2 2026' },
+          { label: 'Évaluations Terminées', val: '148', sub: '60% de l\'effectif' },
+          { label: 'En Cours', val: '62', sub: '25% de l\'effectif' },
+          { label: 'Non Démarrées', val: '38', sub: '15% de l\'effectif' },
           { label: 'Top Performers', val: '28', sub: 'Score ≥ 4.8' },
         ].map((k) => (
           <NCCard key={k.label} style={{ padding: '18px 20px' }}>
@@ -88,7 +93,7 @@ export function PerformanceDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {/* Rating distribution */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Rating Distribution" />
+          <NCSectionLabel label="Répartition des Notes" />
           <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {distribution.map((d) => (
               <div key={d.label}>
@@ -106,7 +111,7 @@ export function PerformanceDashboard() {
 
         {/* Competency scores */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Competency Scores" />
+          <NCSectionLabel label="Scores par Compétence" />
           <div style={{ marginTop: 16, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 6, height: 130 }}>
             {competencies.map((c) => (
               <div key={c.label} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
@@ -120,7 +125,7 @@ export function PerformanceDashboard() {
 
         {/* Trend chart */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Score Trend" />
+          <NCSectionLabel label="Tendance des Scores" />
           <div style={{ marginTop: 16 }}>
             <div style={{ display: 'flex', gap: 8 }}>
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: 110, paddingRight: 4 }}>
@@ -137,7 +142,7 @@ export function PerformanceDashboard() {
               </div>
             </div>
             <div style={{ display: 'flex', marginLeft: 28, marginTop: 6, justifyContent: 'space-between' }}>
-              {['Q2 25', 'Q3 25', 'Q4 25', 'Q1 26', 'Q2 26'].map((q) => <span key={q} style={{ fontSize: 9, color: NC.mutedDim }}>{q}</span>)}
+              {['T2 25', 'T3 25', 'T4 25', 'T1 26', 'T2 26'].map((q) => <span key={q} style={{ fontSize: 9, color: NC.mutedDim }}>{q}</span>)}
             </div>
           </div>
         </NCCard>
@@ -146,14 +151,14 @@ export function PerformanceDashboard() {
       {/* Employee ratings table */}
       <NCCard style={{ padding: 0 }}>
         <div style={{ borderBottom: `1px solid ${NC.border}`, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Performance Reviews — Q2 2026</span>
+          <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Évaluations — T2 2026</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, height: 32, padding: '0 12px', gap: 8, width: 180 }}>
               <div style={{ width: 11, height: 11, borderRadius: '50%', border: `1.5px solid ${NC.mutedDim}` }} />
-              <span style={{ fontSize: 11, color: NC.mutedDim }}>Search...</span>
+              <span style={{ fontSize: 11, color: NC.mutedDim }}>Rechercher...</span>
             </div>
-            {['Department', 'Status', 'Score'].map((f) => (
-              <button key={f} data-cursor style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}>
+            {['Département', 'Statut', 'Score'].map((f) => (
+              <button key={f} onClick={() => alert(`Trier par ${f}`)} data-cursor style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}>
                 <span style={{ fontSize: 11, color: NC.muted }}>{f}</span>
                 <div style={{ width: 0, height: 0, borderLeft: '3px solid transparent', borderRight: '3px solid transparent', borderTop: `4px solid ${NC.muted}` }} />
               </button>
@@ -163,7 +168,7 @@ export function PerformanceDashboard() {
         <table style={{ width: '100%' }}>
           <thead style={{ borderBottom: `1px solid ${NC.border}`, backgroundColor: NC.bg }}>
             <tr>
-              {['Employee', 'Department', 'Role', 'Score', 'Trend', 'Cycle', 'Reviewer', 'Status', ''].map((h) => (
+              {['Employé', 'Département', 'Rôle', 'Score', 'Tendance', 'Cycle', 'Évaluateur', 'Statut', 'Actions'].map((h) => (
                 <th key={h} style={{ textAlign: 'left', padding: 16, fontSize: 10, color: NC.muted, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>{h}</th>
               ))}
             </tr>
@@ -196,7 +201,7 @@ export function PerformanceDashboard() {
                 <td style={{ padding: 16, fontSize: 11, color: NC.muted }}>{r.reviewer}</td>
                 <td style={{ padding: 16 }}><PerfBadge status={r.status} /></td>
                 <td style={{ padding: 16 }}>
-                  <button data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>Review</button>
+                  <button onClick={() => alert(`Ouvrir l'évaluation de ${r.name}`)} data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>Ouvrir</button>
                 </td>
               </tr>
             ))}
@@ -207,15 +212,15 @@ export function PerformanceDashboard() {
       {/* Goal tracking */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Department Performance Avg." />
+          <NCSectionLabel label="Moyenne par Département" />
           <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { dept: 'Engineering', avg: 4.5, pct: 90 },
+              { dept: 'Ingénierie', avg: 4.5, pct: 90 },
               { dept: 'Design', avg: 4.4, pct: 88 },
-              { dept: 'HR', avg: 4.2, pct: 84 },
+              { dept: 'RH', avg: 4.2, pct: 84 },
               { dept: 'Marketing', avg: 4.1, pct: 82 },
-              { dept: 'Operations', avg: 4.0, pct: 80 },
-              { dept: 'Sales', avg: 3.8, pct: 76 },
+              { dept: 'Opérations', avg: 4.0, pct: 80 },
+              { dept: 'Ventes', avg: 3.8, pct: 76 },
             ].map((d) => (
               <div key={d.dept}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
@@ -231,14 +236,14 @@ export function PerformanceDashboard() {
         </NCCard>
 
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Upcoming Review Milestones" />
+          <NCSectionLabel label="Prochaines Étapes d'Évaluation" />
           <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { date: 'Jun 10', event: 'Mid-year self-assessments due', dept: 'All Departments' },
-              { date: 'Jun 15', event: 'Manager reviews submission deadline', dept: 'All Departments' },
-              { date: 'Jun 20', event: 'Engineering team calibration', dept: 'Engineering' },
-              { date: 'Jun 25', event: 'Sales Q2 performance review', dept: 'Sales' },
-              { date: 'Jun 30', event: 'Q2 review cycle closes', dept: 'All Departments' },
+              { date: '10 Juin', event: 'Date limite auto-évaluations', dept: 'Tous les départements' },
+              { date: '15 Juin', event: 'Date limite évaluations managers', dept: 'Tous les départements' },
+              { date: '20 Juin', event: 'Calibration Ingénierie', dept: 'Ingénierie' },
+              { date: '25 Juin', event: 'Revue de performance Ventes T2', dept: 'Ventes' },
+              { date: '30 Juin', event: 'Clôture du cycle d\'évaluation T2', dept: 'Tous les départements' },
             ].map((m, i) => (
               <div key={m.event} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, paddingBottom: 12, borderBottom: i < 4 ? `1px solid ${NC.borderDim}` : 'none' }}>
                 <div style={{ width: 48, flexShrink: 0 }}>
@@ -276,17 +281,17 @@ function NCSectionLabel({ label }: { label: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>{label}</span>
-      <button data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>See all</button>
+      <button onClick={() => alert('Affichage de la liste complète...')} data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Voir tout</button>
     </div>
   );
 }
 
 function PerfBadge({ status }: { status: string }) {
   const styles: Record<string, { bg: string; border: string; color: string }> = {
-    Completed: { bg: NC.greenBg, border: NC.green, color: NC.green },
-    'In Review': { bg: '#FFFBEB', border: '#92400E', color: '#92400E' },
-    Scheduled: { bg: NC.accentBg, border: NC.accentBorder, color: NC.link },
+    Terminé: { bg: NC.greenBg, border: NC.green, color: NC.green },
+    'En revue': { bg: '#FFFBEB', border: '#92400E', color: '#92400E' },
+    Programmé: { bg: NC.accentBg, border: NC.accentBorder, color: NC.link },
   };
-  const s = styles[status] ?? styles.Scheduled;
+  const s = styles[status] ?? styles.Programmé;
   return <span style={{ display: 'inline-block', padding: '3px 8px', fontSize: 10, backgroundColor: s.bg, border: `1px solid ${s.border}`, borderRadius: 4, color: s.color, fontWeight: 600 }}>{status}</span>;
 }

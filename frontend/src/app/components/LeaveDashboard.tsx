@@ -62,8 +62,12 @@ export function LeaveDashboard() {
           <p style={{ fontSize: 11, color: NC.muted }}>Gérez les demandes de congés, les soldes et les workflows d'approbation</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <NCButton>Exporter le rapport</NCButton>
-          <NCButton primary>+ Demander un congé</NCButton>
+          <div onClick={() => alert('Génération du rapport de congés...')}>
+            <NCButton>Exporter le rapport</NCButton>
+          </div>
+          <div onClick={() => alert('Ouverture du formulaire de demande de congé...')}>
+            <NCButton primary>+ Demander un congé</NCButton>
+          </div>
         </div>
       </div>
 
@@ -101,8 +105,8 @@ export function LeaveDashboard() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Juin 2026 — Calendrier</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <button data-cursor style={{ width: 26, height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 14, color: NC.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>‹</button>
-              <button data-cursor style={{ width: 26, height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 14, color: NC.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>›</button>
+              <button onClick={() => alert('Mois précédent')} data-cursor style={{ width: 26, height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 14, color: NC.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>‹</button>
+              <button onClick={() => alert('Mois suivant')} data-cursor style={{ width: 26, height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 14, color: NC.muted, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>›</button>
             </div>
           </div>
 
@@ -178,8 +182,8 @@ export function LeaveDashboard() {
                 <div style={{ height: 1, backgroundColor: NC.borderDim }} />
                 <div style={{ fontSize: 10, color: NC.muted }}>{req.from} → {req.to}</div>
                 <div style={{ display: 'flex', gap: 6 }}>
-                  <NCButton primary>Approuver</NCButton>
-                  <NCButton>Refuser</NCButton>
+                  <div onClick={() => alert('Demande approuvée avec succès !')}><NCButton primary>Approuver</NCButton></div>
+                  <div onClick={() => alert('Demande refusée.')}><NCButton>Refuser</NCButton></div>
                 </div>
               </div>
             ))}
@@ -199,7 +203,7 @@ export function LeaveDashboard() {
               <span style={{ fontSize: 11, color: NC.mutedDim }}>Rechercher...</span>
             </div>
             {['Type', 'Statut', 'Période'].map((f) => (
-              <button key={f} data-cursor style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}>
+              <button key={f} onClick={() => alert(`Trier par ${f}`)} data-cursor style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}>
                 <span style={{ fontSize: 11, color: NC.muted }}>{f}</span>
                 <div style={{ width: 0, height: 0, borderLeft: '3px solid transparent', borderRight: '3px solid transparent', borderTop: `4px solid ${NC.muted}` }} />
               </button>
@@ -232,7 +236,7 @@ export function LeaveDashboard() {
                 <td style={{ padding: 16, fontSize: 11, color: NC.fgDim, fontWeight: 600 }}>{r.days}j</td>
                 <td style={{ padding: 16 }}><LeaveBadge status={r.status} /></td>
                 <td style={{ padding: 16 }}>
-                  <button data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>Voir</button>
+                  <button onClick={() => alert(`Détails de la demande ${r.id}`)} data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>Voir</button>
                 </td>
               </tr>
             ))}
@@ -281,7 +285,7 @@ function NCSectionLabel({ label }: { label: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>{label}</span>
-      <button data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Voir tout</button>
+      <button onClick={() => alert('Ouverture de la liste complète...')} data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Voir tout</button>
     </div>
   );
 }

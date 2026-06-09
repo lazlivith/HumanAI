@@ -1,6 +1,6 @@
 // Offboarding Workflow — Dark theme with amber accents
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const DARK = {
   bg:       '#0F172A',
@@ -32,7 +32,7 @@ interface OffboardingEmployee {
   name: string;
   jobTitle: string;
   departureDate: string;
-  departureReason: 'Resignation' | 'End of Contract' | 'Dismissal';
+  departureReason: 'Démission' | 'Fin de Contrat' | 'Licenciement';
   completedSteps: number;
   totalSteps: number;
   checklist: ChecklistItem[];
@@ -45,69 +45,69 @@ export function OffboardingWorkflow() {
     {
       id: 'OFF001',
       name: 'Thomas Bernard',
-      jobTitle: 'Senior Developer',
+      jobTitle: 'Développeur Senior',
       departureDate: '2026-06-30',
-      departureReason: 'Resignation',
+      departureReason: 'Démission',
       completedSteps: 3,
       totalSteps: 5,
       checklist: [
-        { id: 'c1', label: 'Equipment returned', completed: true, completedAt: '2026-06-05 14:30' },
-        { id: 'c2', label: 'System access revoked', completed: true, completedAt: '2026-06-06 09:15' },
-        { id: 'c3', label: 'Administrative files closed', completed: true, completedAt: '2026-06-07 11:20' },
-        { id: 'c4', label: 'Knowledge transfer document generated', completed: false },
-        { id: 'c5', label: 'Exit interview completed', completed: false },
+        { id: 'c1', label: 'Matériel retourné', completed: true, completedAt: '2026-06-05 14:30' },
+        { id: 'c2', label: 'Accès systèmes révoqués', completed: true, completedAt: '2026-06-06 09:15' },
+        { id: 'c3', label: 'Dossiers administratifs clos', completed: true, completedAt: '2026-06-07 11:20' },
+        { id: 'c4', label: 'Document de passation généré', completed: false },
+        { id: 'c5', label: 'Entretien de départ réalisé', completed: false },
       ],
     },
     {
       id: 'OFF002',
       name: 'Julie Martin',
-      jobTitle: 'Marketing Manager',
+      jobTitle: 'Responsable Marketing',
       departureDate: '2026-07-15',
-      departureReason: 'End of Contract',
+      departureReason: 'Fin de Contrat',
       completedSteps: 1,
       totalSteps: 5,
       checklist: [
-        { id: 'c1', label: 'Equipment returned', completed: true, completedAt: '2026-06-03 16:45' },
-        { id: 'c2', label: 'System access revoked', completed: false },
-        { id: 'c3', label: 'Administrative files closed', completed: false },
-        { id: 'c4', label: 'Knowledge transfer document generated', completed: false },
-        { id: 'c5', label: 'Exit interview completed', completed: false },
+        { id: 'c1', label: 'Matériel retourné', completed: true, completedAt: '2026-06-03 16:45' },
+        { id: 'c2', label: 'Accès systèmes révoqués', completed: false },
+        { id: 'c3', label: 'Dossiers administratifs clos', completed: false },
+        { id: 'c4', label: 'Document de passation généré', completed: false },
+        { id: 'c5', label: 'Entretien de départ réalisé', completed: false },
       ],
     },
     {
       id: 'OFF003',
       name: 'Marc Dubois',
-      jobTitle: 'Sales Representative',
+      jobTitle: 'Commercial',
       departureDate: '2026-06-20',
-      departureReason: 'Dismissal',
+      departureReason: 'Licenciement',
       completedSteps: 4,
       totalSteps: 5,
       checklist: [
-        { id: 'c1', label: 'Equipment returned', completed: true, completedAt: '2026-06-02 10:00' },
-        { id: 'c2', label: 'System access revoked', completed: true, completedAt: '2026-06-02 10:05' },
-        { id: 'c3', label: 'Administrative files closed', completed: true, completedAt: '2026-06-04 15:30' },
-        { id: 'c4', label: 'Knowledge transfer document generated', completed: true, completedAt: '2026-06-05 14:00' },
-        { id: 'c5', label: 'Exit interview completed', completed: false },
+        { id: 'c1', label: 'Matériel retourné', completed: true, completedAt: '2026-06-02 10:00' },
+        { id: 'c2', label: 'Accès systèmes révoqués', completed: true, completedAt: '2026-06-02 10:05' },
+        { id: 'c3', label: 'Dossiers administratifs clos', completed: true, completedAt: '2026-06-04 15:30' },
+        { id: 'c4', label: 'Document de passation généré', completed: true, completedAt: '2026-06-05 14:00' },
+        { id: 'c5', label: 'Entretien de départ réalisé', completed: false },
       ],
     },
   ];
 
   const stats = [
-    { label: 'Active Offboardings', value: '8' },
-    { label: 'Completed This Month', value: '12' },
-    { label: 'Overdue Steps', value: '3', color: DARK.red, bg: DARK.redBg },
-    { label: 'Avg Completion Days', value: '14' },
+    { label: 'Départs en cours', value: '8' },
+    { label: 'Terminés ce mois', value: '12' },
+    { label: 'Tâches en retard', value: '3', color: DARK.red, bg: DARK.redBg },
+    { label: 'Temps moyen (jours)', value: '14' },
   ];
 
   const getReasonColor = (reason: string) => {
-    if (reason === 'Resignation') return DARK.orange;
-    if (reason === 'End of Contract') return DARK.blue;
+    if (reason === 'Démission') return DARK.orange;
+    if (reason === 'Fin de Contrat') return DARK.blue;
     return DARK.red;
   };
 
   const getReasonBg = (reason: string) => {
-    if (reason === 'Resignation') return DARK.orangeBg;
-    if (reason === 'End of Contract') return DARK.blueBg;
+    if (reason === 'Démission') return DARK.orangeBg;
+    if (reason === 'Fin de Contrat') return DARK.blueBg;
     return DARK.redBg;
   };
 
@@ -116,8 +116,8 @@ export function OffboardingWorkflow() {
 
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, color: DARK.text, marginBottom: 8 }}>Offboarding Workflow</h1>
-        <p style={{ fontSize: 14, color: DARK.textDim }}>Manage employee departures and ensure compliance with all exit procedures</p>
+        <h1 style={{ fontSize: 28, fontWeight: 700, color: DARK.text, marginBottom: 8 }}>Workflow d'Offboarding</h1>
+        <p style={{ fontSize: 14, color: DARK.textDim }}>Gérez les départs d'employés et assurez la conformité des procédures de sortie</p>
       </div>
 
       {/* Stats Row */}
@@ -133,7 +133,7 @@ export function OffboardingWorkflow() {
             {stat.bg && (
               <div style={{ display: 'inline-block', padding: '4px 12px', backgroundColor: stat.bg, borderRadius: 6, marginTop: 8 }}>
                 <span style={{ fontSize: 11, fontWeight: 600, color: stat.color }}>
-                  Requires Attention
+                  Action Requise
                 </span>
               </div>
             )}
@@ -170,7 +170,7 @@ export function OffboardingWorkflow() {
 
                   {/* Departure Date */}
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 12, color: DARK.textDim, marginBottom: 4 }}>Departure Date</div>
+                    <div style={{ fontSize: 12, color: DARK.textDim, marginBottom: 4 }}>Date de Départ</div>
                     <div style={{ fontSize: 14, fontWeight: 600, color: DARK.text }}>{emp.departureDate}</div>
                   </div>
 
@@ -186,8 +186,8 @@ export function OffboardingWorkflow() {
                 {/* Progress Bar */}
                 <div style={{ marginBottom: 16 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <span style={{ fontSize: 13, color: DARK.textDim }}>Progress</span>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: DARK.text }}>{emp.completedSteps} of {emp.totalSteps} steps completed</span>
+                    <span style={{ fontSize: 13, color: DARK.textDim }}>Progression</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: DARK.text }}>{emp.completedSteps} sur {emp.totalSteps} étapes complétées</span>
                   </div>
                   <div style={{ width: '100%', height: 10, backgroundColor: DARK.bg, borderRadius: 5, overflow: 'hidden' }}>
                     <div
@@ -203,7 +203,7 @@ export function OffboardingWorkflow() {
                   onMouseEnter={e => (e.currentTarget.style.backgroundColor = DARK.amberDark)}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = DARK.amber)}
                 >
-                  {isExpanded ? 'Hide Checklist' : 'View Checklist'}
+                  {isExpanded ? 'Masquer la checklist' : 'Voir la checklist'}
                 </button>
 
               </div>
@@ -212,7 +212,7 @@ export function OffboardingWorkflow() {
               {isExpanded && (
                 <div style={{ borderTop: `1px solid ${DARK.border}`, padding: 24, backgroundColor: DARK.bg }}>
 
-                  <h4 style={{ fontSize: 16, fontWeight: 600, color: DARK.text, marginBottom: 20 }}>Offboarding Checklist</h4>
+                  <h4 style={{ fontSize: 16, fontWeight: 600, color: DARK.text, marginBottom: 20 }}>Checklist de sortie</h4>
 
                   {/* Checklist Items */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
@@ -223,6 +223,7 @@ export function OffboardingWorkflow() {
                       >
                         {/* Checkbox */}
                         <div
+                          onClick={() => { if(!item.completed) alert(`Tâche "${item.label}" marquée comme terminée.`); }}
                           style={{ width: 24, height: 24, borderRadius: 6, border: `2px solid ${item.completed ? DARK.green : DARK.border}`, backgroundColor: item.completed ? DARK.green : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}
                         >
                           {item.completed && (
@@ -239,7 +240,7 @@ export function OffboardingWorkflow() {
                           </div>
                           {item.completedAt && (
                             <div style={{ fontSize: 12, color: DARK.textDim, marginTop: 4 }}>
-                              Completed: {item.completedAt}
+                              Terminé à : {item.completedAt}
                             </div>
                           )}
                         </div>
@@ -247,11 +248,12 @@ export function OffboardingWorkflow() {
                         {/* Mark Done Button */}
                         {!item.completed && (
                           <button
+                            onClick={() => alert(`Tâche "${item.label}" marquée comme terminée.`)}
                             style={{ height: 36, padding: '0 16px', backgroundColor: DARK.amber, border: 'none', borderRadius: 6, color: '#000', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
                             onMouseEnter={e => (e.currentTarget.style.backgroundColor = DARK.amberDark)}
                             onMouseLeave={e => (e.currentTarget.style.backgroundColor = DARK.amber)}
                           >
-                            Mark Done
+                            Marquer comme terminé
                           </button>
                         )}
                       </div>
@@ -261,18 +263,20 @@ export function OffboardingWorkflow() {
                   {/* Bottom Actions */}
                   <div style={{ display: 'flex', gap: 12 }}>
                     <button
+                      onClick={() => alert('Génération des documents de sortie (Solde de tout compte, Certificat de travail)...')}
                       style={{ height: 44, padding: '0 24px', backgroundColor: DARK.amber, border: 'none', borderRadius: 8, color: '#000', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
                       onMouseEnter={e => (e.currentTarget.style.backgroundColor = DARK.amberDark)}
                       onMouseLeave={e => (e.currentTarget.style.backgroundColor = DARK.amber)}
                     >
-                      Generate Exit Documents
+                      Générer les documents de sortie
                     </button>
                     <button
+                      onClick={() => alert('Ouverture du profil complet de l\'employé...')}
                       style={{ height: 44, padding: '0 24px', backgroundColor: 'transparent', border: `1px solid ${DARK.border}`, borderRadius: 8, color: DARK.text, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
                       onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = DARK.cardHover; }}
                       onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent'; }}
                     >
-                      View Employee Profile
+                      Voir le profil de l'employé
                     </button>
                   </div>
 
@@ -286,6 +290,7 @@ export function OffboardingWorkflow() {
 
       {/* Floating AI Button */}
       <button
+        onClick={() => alert('Assistant IA d\'Offboarding : "Comment puis-je vous aider pour le départ de ce collaborateur ?"')}
         style={{ position: 'fixed', bottom: 28, right: 28, width: 56, height: 56, borderRadius: '50%', backgroundColor: DARK.amber, border: 'none', boxShadow: '0 4px 20px rgba(245,158,11,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, transition: 'transform 0.15s' }}
         onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.1)'; }}
         onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}

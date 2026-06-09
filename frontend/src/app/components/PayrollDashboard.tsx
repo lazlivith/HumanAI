@@ -1,4 +1,5 @@
 // Payroll Dashboard — salary and compensation management
+import React from 'react';
 
 const NC = {
   bg:           '#EDF2F7',
@@ -26,11 +27,11 @@ const FONT_CLASH = "'Neue Montreal', 'Clash Display', sans-serif";
 
 export function PayrollDashboard() {
   const payrollData = [
-    { name: 'James Harlow', id: 'EMP-001', dept: 'Engineering', salary: 95000, bonus: 5000, deductions: 12500, net: 87500, status: 'Processed' },
-    { name: 'Sara Mitchell', id: 'EMP-002', dept: 'Marketing', salary: 82000, bonus: 3000, deductions: 10800, net: 74200, status: 'Processed' },
-    { name: 'David Osei', id: 'EMP-003', dept: 'Design', salary: 78000, bonus: 2000, deductions: 9800, net: 70200, status: 'Pending' },
-    { name: 'Priya Nair', id: 'EMP-004', dept: 'HR', salary: 72000, bonus: 2500, deductions: 9200, net: 65300, status: 'Processed' },
-    { name: 'Carlos Rivera', id: 'EMP-005', dept: 'Sales', salary: 68000, bonus: 8000, deductions: 9500, net: 66500, status: 'Processed' },
+    { name: 'James Harlow', id: 'EMP-001', dept: 'Ingénierie', salary: 95000, bonus: 5000, deductions: 12500, net: 87500, status: 'Traité' },
+    { name: 'Sara Mitchell', id: 'EMP-002', dept: 'Marketing', salary: 82000, bonus: 3000, deductions: 10800, net: 74200, status: 'Traité' },
+    { name: 'David Osei', id: 'EMP-003', dept: 'Design', salary: 78000, bonus: 2000, deductions: 9800, net: 70200, status: 'En attente' },
+    { name: 'Priya Nair', id: 'EMP-004', dept: 'RH', salary: 72000, bonus: 2500, deductions: 9200, net: 65300, status: 'Traité' },
+    { name: 'Carlos Rivera', id: 'EMP-005', dept: 'Ventes', salary: 68000, bonus: 8000, deductions: 9500, net: 66500, status: 'Traité' },
   ];
 
   return (
@@ -39,23 +40,27 @@ export function PayrollDashboard() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Payroll Management</h2>
-          <p style={{ fontSize: 11, color: NC.muted }}>Process payroll, manage compensation, and track expenses</p>
+          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Gestion de la Paie</h2>
+          <p style={{ fontSize: 11, color: NC.muted }}>Traitez la paie, gérez les rémunérations et suivez les dépenses</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <NCButton>Download Report</NCButton>
-          <NCButton primary>Process Payroll</NCButton>
+          <div onClick={() => alert('Téléchargement du rapport de paie en cours...')}>
+            <NCButton>Télécharger le rapport</NCButton>
+          </div>
+          <div onClick={() => alert('Lancement du traitement de la paie pour le mois en cours...')}>
+            <NCButton primary>Traiter la Paie</NCButton>
+          </div>
         </div>
       </div>
 
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
         {[
-          { label: 'Total Payroll', value: '$1.8M', sub: 'This month' },
-          { label: 'Avg. Salary', value: '$74.2K', sub: 'Per employee' },
-          { label: 'Pending Payments', value: '12', sub: '4.8%' },
-          { label: 'Bonuses Paid', value: '$127K', sub: 'This quarter' },
-          { label: 'Tax Withheld', value: '$385K', sub: 'YTD' },
+          { label: 'Masse Salariale', value: '1.8M€', sub: 'Ce mois-ci' },
+          { label: 'Salaire Moyen', value: '74.2K€', sub: 'Par employé' },
+          { label: 'Paiements en attente', value: '12', sub: '4.8%' },
+          { label: 'Primes Versées', value: '127K€', sub: 'Ce trimestre' },
+          { label: 'Retenues / Taxes', value: '385K€', sub: 'Annuel' },
         ].map((stat) => (
           <NCCard key={stat.label} style={{ padding: '18px 20px' }}>
             <div style={{ fontSize: 10, color: NC.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{stat.label}</div>
@@ -69,18 +74,18 @@ export function PayrollDashboard() {
       <NCCard style={{ padding: 0 }}>
         <div style={{ borderBottom: `1px solid ${NC.border}`, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Current Payroll Cycle</span>
+            <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Cycle de Paie Actuel</span>
             <div style={{ height: 22, padding: '0 8px', backgroundColor: NC.accentBg, border: `1px solid ${NC.accentBorder}`, borderRadius: 4, display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: 10, color: NC.link, fontWeight: 600 }}>June 2026</span>
+              <span style={{ fontSize: 10, color: NC.link, fontWeight: 600 }}>Juin 2026</span>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, height: 32, padding: '0 12px', gap: 8, width: 180 }}>
               <div style={{ width: 11, height: 11, borderRadius: '50%', border: `1.5px solid ${NC.mutedDim}` }} />
-              <span style={{ fontSize: 11, color: NC.mutedDim }}>Search employees...</span>
+              <span style={{ fontSize: 11, color: NC.mutedDim }}>Rechercher un employé...</span>
             </div>
-            <button data-cursor style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}>
-              <span style={{ fontSize: 11, color: NC.muted }}>Department</span>
+            <button onClick={() => alert('Filtrer par Département')} data-cursor style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}>
+              <span style={{ fontSize: 11, color: NC.muted }}>Département</span>
               <div style={{ width: 0, height: 0, borderLeft: '3px solid transparent', borderRight: '3px solid transparent', borderTop: `4px solid ${NC.muted}` }} />
             </button>
           </div>
@@ -89,7 +94,7 @@ export function PayrollDashboard() {
         <table style={{ width: '100%' }}>
           <thead style={{ borderBottom: `1px solid ${NC.border}`, backgroundColor: NC.bg }}>
             <tr>
-              {['Employee', 'ID', 'Department', 'Base Salary', 'Bonus', 'Deductions', 'Net Pay', 'Status'].map((h) => (
+              {['Employé', 'ID', 'Département', 'Salaire Base', 'Primes', 'Retenues', 'Net à Payer', 'Statut'].map((h) => (
                 <th key={h} style={{ textAlign: 'left', padding: 16, fontSize: 10, color: NC.muted, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>{h}</th>
               ))}
             </tr>
@@ -107,10 +112,10 @@ export function PayrollDashboard() {
                 </td>
                 <td style={{ padding: 16, fontSize: 11, color: NC.mutedDim }}>{p.id}</td>
                 <td style={{ padding: 16, fontSize: 11, color: NC.muted }}>{p.dept}</td>
-                <td style={{ padding: 16, fontSize: 11, color: NC.fgDim, fontWeight: 600 }}>${(p.salary / 1000).toFixed(0)}K</td>
-                <td style={{ padding: 16, fontSize: 11, color: NC.fgDim }}>${(p.bonus / 1000).toFixed(1)}K</td>
-                <td style={{ padding: 16, fontSize: 11, color: NC.muted }}>${(p.deductions / 1000).toFixed(1)}K</td>
-                <td style={{ padding: 16, fontSize: 12, color: NC.fg, fontWeight: 700 }}>${(p.net / 1000).toFixed(1)}K</td>
+                <td style={{ padding: 16, fontSize: 11, color: NC.fgDim, fontWeight: 600 }}>{(p.salary / 1000).toFixed(0)}K€</td>
+                <td style={{ padding: 16, fontSize: 11, color: NC.fgDim }}>{(p.bonus / 1000).toFixed(1)}K€</td>
+                <td style={{ padding: 16, fontSize: 11, color: NC.muted }}>{(p.deductions / 1000).toFixed(1)}K€</td>
+                <td style={{ padding: 16, fontSize: 12, color: NC.fg, fontWeight: 700 }}>{(p.net / 1000).toFixed(1)}K€</td>
                 <td style={{ padding: 16 }}><PayrollStatusBadge status={p.status} /></td>
               </tr>
             ))}
@@ -118,8 +123,8 @@ export function PayrollDashboard() {
         </table>
 
         <div style={{ borderTop: `1px solid ${NC.border}`, padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: 11, color: NC.muted }}>5 of 248 employees shown</span>
-          <div style={{ fontSize: 11, color: NC.fgDim }}>Total: <span style={{ fontWeight: 700, color: NC.fg }}>$363.7K</span></div>
+          <span style={{ fontSize: 11, color: NC.muted }}>5 employés sur 248 affichés</span>
+          <div style={{ fontSize: 11, color: NC.fgDim }}>Total: <span style={{ fontWeight: 700, color: NC.fg }}>363.7K€</span></div>
         </div>
       </NCCard>
 
@@ -127,20 +132,20 @@ export function PayrollDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {/* Department payroll breakdown */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Payroll by Department" />
+          <NCSectionLabel label="Masse Salariale par Département" />
           <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { dept: 'Engineering', amount: 582000, pct: 32 },
-              { dept: 'Sales', amount: 418000, pct: 23 },
+              { dept: 'Ingénierie', amount: 582000, pct: 32 },
+              { dept: 'Ventes', amount: 418000, pct: 23 },
               { dept: 'Marketing', amount: 312000, pct: 17 },
-              { dept: 'Operations', amount: 275000, pct: 15 },
+              { dept: 'Opérations', amount: 275000, pct: 15 },
               { dept: 'Design', amount: 148000, pct: 8 },
               { dept: 'Finance', amount: 91000, pct: 5 },
             ].map((d) => (
               <div key={d.dept}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <span style={{ fontSize: 11, color: NC.fgDim }}>{d.dept}</span>
-                  <span style={{ fontSize: 10, color: NC.muted }}>${(d.amount / 1000).toFixed(0)}K ({d.pct}%)</span>
+                  <span style={{ fontSize: 10, color: NC.muted }}>{(d.amount / 1000).toFixed(0)}K€ ({d.pct}%)</span>
                 </div>
                 <div style={{ height: 6, width: '100%', backgroundColor: NC.accentBg, borderRadius: 3, position: 'relative', overflow: 'hidden' }}>
                   <div style={{ position: 'absolute', inset: '0 auto 0 0', backgroundColor: NC.accent, borderRadius: 3, width: `${d.pct * 3}%` }} />
@@ -152,15 +157,15 @@ export function PayrollDashboard() {
 
         {/* Payroll timeline */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Payroll Timeline" />
+          <NCSectionLabel label="Calendrier de Paie" />
           <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 14 }}>
             {[
-              { date: 'Jun 1', event: 'Payroll cycle started', status: 'completed' },
-              { date: 'Jun 5', event: 'Time sheets submitted', status: 'completed' },
-              { date: 'Jun 8', event: 'Payroll review', status: 'current' },
-              { date: 'Jun 12', event: 'Payroll approval', status: 'pending' },
-              { date: 'Jun 15', event: 'Payment processing', status: 'pending' },
-              { date: 'Jun 16', event: 'Direct deposits', status: 'pending' },
+              { date: '1 Juin', event: 'Début du cycle', status: 'completed' },
+              { date: '5 Juin', event: 'Feuilles de temps soumises', status: 'completed' },
+              { date: '8 Juin', event: 'Revue de la paie', status: 'current' },
+              { date: '12 Juin', event: 'Validation de la paie', status: 'pending' },
+              { date: '15 Juin', event: 'Traitement des paiements', status: 'pending' },
+              { date: '16 Juin', event: 'Dépôts directs', status: 'pending' },
             ].map((item) => (
               <div key={item.event} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
                 <div style={{ width: 50, flexShrink: 0, fontSize: 10, color: NC.muted }}>{item.date}</div>
@@ -179,7 +184,7 @@ export function PayrollDashboard() {
 
         {/* Expense breakdown */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Compensation Breakdown" />
+          <NCSectionLabel label="Répartition des Coûts" />
           <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
             {/* Donut chart */}
             <div style={{ position: 'relative', width: 110, height: 110 }}>
@@ -194,17 +199,17 @@ export function PayrollDashboard() {
                 ))}
               </svg>
               <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg }}>$1.8M</div>
+                <div style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg }}>1.8M€</div>
                 <div style={{ fontSize: 9, color: NC.mutedDim, textTransform: 'uppercase', letterSpacing: '0.05em' }}>total</div>
               </div>
             </div>
             {/* Legend */}
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
-                { label: 'Base Salary', pct: 68, color: NC.navy },
-                { label: 'Bonuses', pct: 12, color: NC.accent },
-                { label: 'Benefits', pct: 11, color: NC.teal },
-                { label: 'Tax Withholding', pct: 9, color: NC.link },
+                { label: 'Salaire de Base', pct: 68, color: NC.navy },
+                { label: 'Primes', pct: 12, color: NC.accent },
+                { label: 'Avantages', pct: 11, color: NC.teal },
+                { label: 'Taxes / Retenues', pct: 9, color: NC.link },
               ].map((item) => (
                 <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -239,17 +244,17 @@ function NCSectionLabel({ label }: { label: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>{label}</span>
-      <button data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>See all</button>
+      <button onClick={() => alert('Affichage de la vue détaillée...')} data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Voir tout</button>
     </div>
   );
 }
 
 function PayrollStatusBadge({ status }: { status: string }) {
   const styles: Record<string, { bg: string; border: string; color: string }> = {
-    Processed: { bg: NC.greenBg, border: NC.green, color: NC.green },
-    Pending: { bg: '#FFFBEB', border: '#92400E', color: '#92400E' },
-    Failed: { bg: NC.redBg, border: NC.red, color: NC.red },
+    Traité: { bg: NC.greenBg, border: NC.green, color: NC.green },
+    'En attente': { bg: '#FFFBEB', border: '#92400E', color: '#92400E' },
+    Échoué: { bg: NC.redBg, border: NC.red, color: NC.red },
   };
-  const s = styles[status] ?? styles.Pending;
+  const s = styles[status] ?? styles['En attente'];
   return <span style={{ display: 'inline-block', padding: '3px 8px', fontSize: 10, backgroundColor: s.bg, border: `1px solid ${s.border}`, borderRadius: 4, color: s.color, fontWeight: 600 }}>{status}</span>;
 }

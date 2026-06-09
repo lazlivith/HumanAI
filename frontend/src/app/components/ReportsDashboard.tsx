@@ -1,4 +1,5 @@
 // Reports Dashboard — analytics and reporting
+import React from 'react';
 
 const NC = {
   bg:           '#EDF2F7',
@@ -22,11 +23,11 @@ const FONT_CLASH = "'Neue Montreal', 'Clash Display', sans-serif";
 
 export function ReportsDashboard() {
   const savedReports = [
-    { name: 'Monthly HR Summary', type: 'Summary', lastRun: '2024-06-01', size: '2.4 MB' },
-    { name: 'Payroll Analysis Q2', type: 'Financial', lastRun: '2024-05-28', size: '1.8 MB' },
-    { name: 'Recruitment Metrics', type: 'Recruitment', lastRun: '2024-05-25', size: '892 KB' },
-    { name: 'Attendance Report May', type: 'Attendance', lastRun: '2024-05-31', size: '1.2 MB' },
-    { name: 'Department Performance', type: 'Performance', lastRun: '2024-05-20', size: '3.1 MB' },
+    { name: 'Résumé RH Mensuel', type: 'Résumé', lastRun: '2024-06-01', size: '2.4 MB' },
+    { name: 'Analyse de Paie T2', type: 'Financier', lastRun: '2024-05-28', size: '1.8 MB' },
+    { name: 'Métriques de Recrutement', type: 'Recrutement', lastRun: '2024-05-25', size: '892 KB' },
+    { name: 'Rapport de Présence Mai', type: 'Présence', lastRun: '2024-05-31', size: '1.2 MB' },
+    { name: 'Performances par Département', type: 'Performance', lastRun: '2024-05-20', size: '3.1 MB' },
   ];
 
   return (
@@ -35,22 +36,26 @@ export function ReportsDashboard() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Reports & Analytics</h2>
-          <p style={{ fontSize: 11, color: NC.muted }}>Generate reports, analyze data, and export insights</p>
+          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Rapports & Analytique</h2>
+          <p style={{ fontSize: 11, color: NC.muted }}>Générez des rapports, analysez des données et exportez des insights</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <NCButton>Schedule Report</NCButton>
-          <NCButton primary>+ Create Report</NCButton>
+          <div onClick={() => alert('Ouverture du planificateur de rapports...')}>
+            <NCButton>Planifier un rapport</NCButton>
+          </div>
+          <div onClick={() => alert('Ouverture de l\'assistant de création de rapport...')}>
+            <NCButton primary>+ Créer un rapport</NCButton>
+          </div>
         </div>
       </div>
 
       {/* Quick stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
         {[
-          { label: 'Reports Generated', value: '142', sub: 'This month' },
-          { label: 'Scheduled Reports', value: '18', sub: 'Active' },
-          { label: 'Data Exports', value: '67', sub: 'This quarter' },
-          { label: 'Avg. Generation Time', value: '8.2s', sub: 'Per report' },
+          { label: 'Rapports Générés', value: '142', sub: 'Ce mois-ci' },
+          { label: 'Rapports Planifiés', value: '18', sub: 'Actifs' },
+          { label: 'Données Exportées', value: '67', sub: 'Ce trimestre' },
+          { label: 'Temps moyen de génération', value: '8.2s', sub: 'Par rapport' },
         ].map((stat) => (
           <NCCard key={stat.label} style={{ padding: '18px 20px' }}>
             <div style={{ fontSize: 10, color: NC.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{stat.label}</div>
@@ -63,15 +68,16 @@ export function ReportsDashboard() {
       {/* Report categories */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {[
-          { title: 'Employee Reports', count: 8 },
-          { title: 'Financial Reports', count: 12 },
-          { title: 'Attendance Reports', count: 6 },
-          { title: 'Recruitment Reports', count: 5 },
-          { title: 'Performance Reports', count: 9 },
-          { title: 'Compliance Reports', count: 7 },
+          { title: 'Rapports Employés', count: 8 },
+          { title: 'Rapports Financiers', count: 12 },
+          { title: 'Rapports de Présence', count: 6 },
+          { title: 'Rapports de Recrutement', count: 5 },
+          { title: 'Rapports de Performance', count: 9 },
+          { title: 'Rapports de Conformité', count: 7 },
         ].map((cat) => (
           <NCCard
             key={cat.title}
+            onClick={() => alert(`Filtrage par catégorie : ${cat.title}`)}
             style={{ padding: 20, cursor: 'none' }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = '#F9FAFB'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = NC.card; }}
@@ -93,14 +99,14 @@ export function ReportsDashboard() {
       {/* Saved reports table */}
       <NCCard style={{ padding: 0 }}>
         <div style={{ borderBottom: `1px solid ${NC.border}`, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Recent Reports</span>
+          <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Rapports Récents</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, height: 32, padding: '0 12px', gap: 8, width: 180 }}>
               <div style={{ width: 11, height: 11, borderRadius: '50%', border: `1.5px solid ${NC.mutedDim}` }} />
-              <span style={{ fontSize: 11, color: NC.mutedDim }}>Search reports...</span>
+              <span style={{ fontSize: 11, color: NC.mutedDim }}>Rechercher un rapport...</span>
             </div>
-            {['Type', 'Date Range'].map((f) => (
-              <button key={f} data-cursor style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}>
+            {['Type', 'Période'].map((f) => (
+              <button key={f} onClick={() => alert(`Trier par ${f}`)} data-cursor style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}>
                 <span style={{ fontSize: 11, color: NC.muted }}>{f}</span>
                 <div style={{ width: 0, height: 0, borderLeft: '3px solid transparent', borderRight: '3px solid transparent', borderTop: `4px solid ${NC.muted}` }} />
               </button>
@@ -111,7 +117,7 @@ export function ReportsDashboard() {
         <table style={{ width: '100%' }}>
           <thead style={{ borderBottom: `1px solid ${NC.border}`, backgroundColor: NC.bg }}>
             <tr>
-              {['Report Name', 'Type', 'Last Run', 'File Size', 'Actions'].map((h) => (
+              {['Nom du Rapport', 'Type', 'Dernière Exécution', 'Taille', 'Actions'].map((h) => (
                 <th key={h} style={{ textAlign: 'left', padding: 16, fontSize: 10, color: NC.muted, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>{h}</th>
               ))}
             </tr>
@@ -134,8 +140,8 @@ export function ReportsDashboard() {
                 <td style={{ padding: 16, fontSize: 11, color: NC.muted }}>{report.size}</td>
                 <td style={{ padding: 16 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <button data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>Download</button>
-                    <button data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>View</button>
+                    <button onClick={() => alert(`Téléchargement de ${report.name}...`)} data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>Télécharger</button>
+                    <button onClick={() => alert(`Affichage de ${report.name}...`)} data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>Voir</button>
                   </div>
                 </td>
               </tr>
@@ -148,15 +154,15 @@ export function ReportsDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         {/* Report generation trend */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Report Generation Trend" />
+          <NCSectionLabel label="Tendance de Génération" />
           <div style={{ marginTop: 16, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 8, height: 150 }}>
             {[
               { month: 'Jan', count: 52 },
-              { month: 'Feb', count: 48 },
+              { month: 'Fév', count: 48 },
               { month: 'Mar', count: 61 },
-              { month: 'Apr', count: 58 },
-              { month: 'May', count: 73 },
-              { month: 'Jun', count: 42 },
+              { month: 'Avr', count: 58 },
+              { month: 'Mai', count: 73 },
+              { month: 'Juin', count: 42 },
             ].map((d) => (
               <div key={d.month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
                 <div style={{ fontSize: 11, color: NC.fgDim, fontWeight: 600 }}>{d.count}</div>
@@ -169,20 +175,20 @@ export function ReportsDashboard() {
 
         {/* Popular report types */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Most Used Report Types" />
+          <NCSectionLabel label="Types de Rapports les plus Utilisés" />
           <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { type: 'Financial Reports', usage: 87, count: 45 },
-              { type: 'Employee Reports', usage: 72, count: 38 },
-              { type: 'Performance Reports', usage: 64, count: 32 },
-              { type: 'Attendance Reports', usage: 51, count: 27 },
-              { type: 'Recruitment Reports', usage: 38, count: 19 },
-              { type: 'Compliance Reports', usage: 29, count: 15 },
+              { type: 'Rapports Financiers', usage: 87, count: 45 },
+              { type: 'Rapports Employés', usage: 72, count: 38 },
+              { type: 'Rapports de Performance', usage: 64, count: 32 },
+              { type: 'Rapports de Présence', usage: 51, count: 27 },
+              { type: 'Rapports de Recrutement', usage: 38, count: 19 },
+              { type: 'Rapports de Conformité', usage: 29, count: 15 },
             ].map((item) => (
               <div key={item.type}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <span style={{ fontSize: 11, color: NC.fgDim }}>{item.type}</span>
-                  <span style={{ fontSize: 10, color: NC.muted }}>{item.count} reports</span>
+                  <span style={{ fontSize: 10, color: NC.muted }}>{item.count} rapports</span>
                 </div>
                 <div style={{ height: 6, width: '100%', backgroundColor: NC.accentBg, borderRadius: 3, position: 'relative', overflow: 'hidden' }}>
                   <div style={{ position: 'absolute', inset: '0 auto 0 0', backgroundColor: NC.accent, borderRadius: 3, width: `${item.usage}%` }} />
@@ -195,19 +201,19 @@ export function ReportsDashboard() {
 
       {/* Scheduled reports */}
       <NCCard style={{ padding: 20 }}>
-        <NCSectionLabel label="Scheduled Reports" />
+        <NCSectionLabel label="Rapports Planifiés" />
         <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
           {[
-            { name: 'Weekly Attendance Summary', freq: 'Every Monday, 9:00 AM', next: 'Jun 8, 2026' },
-            { name: 'Monthly Payroll Report', freq: 'First day of month', next: 'Jul 1, 2026' },
-            { name: 'Quarterly Performance Review', freq: 'Every 3 months', next: 'Jul 1, 2026' },
+            { name: 'Résumé Hebdomadaire des Présences', freq: 'Chaque Lundi, 9:00 AM', next: '8 Juin 2026' },
+            { name: 'Rapport Mensuel de Paie', freq: 'Premier jour du mois', next: '1 Juil 2026' },
+            { name: 'Revue de Performance Trimestrielle', freq: 'Tous les 3 mois', next: '1 Juil 2026' },
           ].map((sched) => (
             <div key={sched.name} style={{ border: `1px solid ${NC.border}`, borderRadius: 8, padding: 16 }}>
               <div style={{ fontSize: 11, color: NC.fg, fontWeight: 500, marginBottom: 8 }}>{sched.name}</div>
               <div style={{ fontSize: 10, color: NC.muted, marginBottom: 4 }}>{sched.freq}</div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12, paddingTop: 12, borderTop: `1px solid ${NC.borderDim}` }}>
-                <span style={{ fontSize: 10, color: NC.mutedDim }}>Next: {sched.next}</span>
-                <button data-cursor style={{ width: 24, height: 24, border: `1px solid ${NC.border}`, borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>
+                <span style={{ fontSize: 10, color: NC.mutedDim }}>Prochain : {sched.next}</span>
+                <button onClick={() => alert(`Options pour le rapport planifié: ${sched.name}`)} data-cursor style={{ width: 24, height: 24, border: `1px solid ${NC.border}`, borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <div style={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: NC.muted }} />
                     <div style={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: NC.muted }} />
@@ -240,7 +246,7 @@ function NCSectionLabel({ label }: { label: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>{label}</span>
-      <button data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>See all</button>
+      <button onClick={() => alert('Voir la liste complète...')} data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Voir tout</button>
     </div>
   );
 }
