@@ -209,14 +209,31 @@ function MainLayout() {
             <button data-cursor style={{ width: 32, height: 32, backgroundColor: '#F1F5F9', border: `1px solid ${NC.border}`, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none' }}>
               <div style={{ width: 13, height: 13, borderRadius: '50%', border: `1.5px solid ${NC.muted}` }} />
             </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 12, borderLeft: `1px solid ${NC.border}` }}>
-              <div style={{ width: 30, height: 30, borderRadius: '50%', background: BTN_GRADIENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#FFFFFF' }}>{user?.name?.substring(0, 2).toUpperCase() || 'AD'}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, paddingLeft: 12, borderLeft: `1px solid ${NC.border}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', background: BTN_GRADIENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: '#FFFFFF' }}>{user?.name?.substring(0, 2).toUpperCase() || 'AD'}</span>
+                </div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 500, color: NC.fg }}>{user?.name || 'Admin'}</div>
+                  <div style={{ fontSize: 9, color: NC.muted }}>{user?.role || 'HR Manager'}</div>
+                </div>
               </div>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 500, color: NC.fg }}>{user?.name || 'Admin'}</div>
-                <div style={{ fontSize: 9, color: NC.muted }}>{user?.role || 'HR Manager'}</div>
-              </div>
+              <button 
+                onClick={logout}
+                style={{ 
+                  background: 'none', border: `1px solid ${NC.borderDim}`, borderRadius: 6, padding: '6px 12px',
+                  fontSize: 11, fontWeight: 500, color: '#EF4444', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.2s'
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Déconnexion
+              </button>
             </div>
           </div>
         </header>
