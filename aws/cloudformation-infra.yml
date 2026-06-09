@@ -1,0 +1,219 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  HUMAI Frontend Infrastructure — S3 + CloudFront + IAM OIDC Role for GitHub Actions
+  Déployer cette stack UNE SEULE FOIS dans votre compte AWS.
+  Elle crée tout le nécessaire pour que le pipeline CI/CD fonctionne automatiquement.
+
+# ── Paramètres configurables ───────────────────────────────────────────────
+
+Parameters:
+  GitHubOrg:
+    Type: String
+    Default: lazlivith
+    Description: Nom de l'organisation ou du compte GitHub
+
+  GitHubRepo:
+    Type: String
+    Default: HumanAI
+    Description: Nom du dépôt GitHub
+
+  BucketName:
+    Type: String
+    Default: humai-frontend-prod
+    Description: >
+      Nom du bucket S3. DOIT être unique globalement dans AWS.
+      Si ce nom est pris, changez-le (ex: humai-frontend-prod-2026).
+
+  Environment:
+    Type: String
+    Default: production
+    AllowedValues: [production, staging]
+    Description: Environnement cible
+
+# ── Ressources AWS ─────────────────────────────────────────────────────────
+
+Resources:
+
+  # ── 1. Bucket S3 pour héberger les fichiers statiques ──────────────────
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      # Accès public bloqué — CloudFront accède via OAC, pas public
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: Project
+          Value: HUMAI
+        - Key: Environment
+          Value: !Ref Environment
+
+  # ── 2. Policy S3 : autorise uniquement CloudFront (OAC) ────────────────
+  FrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendBucket
+      PolicyDocument:
+        Statement:
+          - Sid: AllowCloudFrontOAC
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub arn:aws:s3:::${BucketName}/*
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}
+
+  # ── 3. Origin Access Control (OAC) pour CloudFront → S3 ────────────────
+  CloudFrontOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: HUMAI-OAC
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  # ── 4. Distribution CloudFront (CDN mondial) ────────────────────────────
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: HUMAI Frontend — Production CDN
+        DefaultRootObject: index.html
+
+        # Origine : le bucket S3
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt FrontendBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt CloudFrontOAC.Id
+            S3OriginConfig: {}
+
+        # Comportement par défaut
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # Managed-CachingOptimized
+          AllowedMethods: [GET, HEAD, OPTIONS]
+
+        # SPA Routing : toutes les routes 404 → index.html (React Router)
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 0
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 0
+
+        # Restriction géographique : aucune (accessible mondialement)
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: none
+
+        # HTTPS avec certificat CloudFront par défaut
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+          MinimumProtocolVersion: TLSv1.2_2021
+
+      Tags:
+        - Key: Project
+          Value: HUMAI
+        - Key: Environment
+          Value: !Ref Environment
+
+  # ── 5. OIDC Provider GitHub (permet à GitHub de s'authentifier à AWS) ───
+  GitHubOIDCProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+        - 1c58a3a8518e8759bf075b76b750d4f2df264fcd
+
+  # ── 6. Rôle IAM pour GitHub Actions (accès S3 + CloudFront uniquement) ──
+  GitHubActionsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub HUMAI-GitHubActions-${Environment}
+      Description: Rôle assumé par GitHub Actions pour déployer le frontend HUMAI
+
+      # Trust policy : autorise uniquement ce repo GitHub sur la branche main
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !GetAtt GitHubOIDCProvider.Arn
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              StringLike:
+                # Seule la branche main du repo HumanAI peut assumer ce rôle
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/${GitHubRepo}:ref:refs/heads/main
+
+      # Permissions accordées : S3 et CloudFront uniquement (principe du moindre privilège)
+      Policies:
+        - PolicyName: HUMAI-Deploy-Policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # S3 : lire, écrire, supprimer dans le bucket frontend
+              - Sid: S3Deploy
+                Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                  - s3:ListBucket
+                  - s3:GetBucketLocation
+                Resource:
+                  - !Sub arn:aws:s3:::${BucketName}
+                  - !Sub arn:aws:s3:::${BucketName}/*
+              # CloudFront : invalider le cache après déploiement
+              - Sid: CloudFrontInvalidate
+                Effect: Allow
+                Action:
+                  - cloudfront:CreateInvalidation
+                  - cloudfront:GetDistribution
+                Resource: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}
+
+# ── Sorties (valeurs à copier dans GitHub Secrets) ─────────────────────────
+
+Outputs:
+
+  # ⬇️  À copier dans GitHub Secret : AWS_ROLE_ARN
+  GitHubActionsRoleARN:
+    Description: "👉 GITHUB SECRET: AWS_ROLE_ARN — Copiez cette valeur"
+    Value: !GetAtt GitHubActionsRole.Arn
+    Export:
+      Name: !Sub HUMAI-GitHubActionsRoleARN-${Environment}
+
+  # ⬇️  À copier dans GitHub Secret : CLOUDFRONT_DISTRIBUTION_ID
+  CloudFrontDistributionId:
+    Description: "👉 GITHUB SECRET: CLOUDFRONT_DISTRIBUTION_ID — Copiez cette valeur"
+    Value: !Ref CloudFrontDistribution
+    Export:
+      Name: !Sub HUMAI-CloudFrontDistributionId-${Environment}
+
+  # URL publique de l'application (à partager avec l'équipe)
+  ApplicationURL:
+    Description: "🌐 URL de votre application HUMAI"
+    Value: !Sub https://${CloudFrontDistribution.DomainName}
+    Export:
+      Name: !Sub HUMAI-AppURL-${Environment}
+
+  BucketName:
+    Description: "Nom du bucket S3"
+    Value: !Ref FrontendBucket
