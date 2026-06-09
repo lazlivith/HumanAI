@@ -46,8 +46,8 @@ export function EmployeesDashboard() {
           <p style={{ fontSize: 11, color: NC.muted }}>Gérez les dossiers, profils et la structure organisationnelle</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <NCButton>Importer CSV</NCButton>
-          <NCButton primary>+ Ajouter un employé</NCButton>
+          <div onClick={() => alert('Importation du fichier CSV en cours...')}><NCButton>Importer CSV</NCButton></div>
+          <div onClick={() => alert('Ouverture du formulaire d\'ajout d\'employé...')}><NCButton primary>+ Ajouter un employé</NCButton></div>
         </div>
       </div>
 
@@ -88,6 +88,7 @@ export function EmployeesDashboard() {
               <button
                 key={f}
                 data-cursor
+                onClick={() => alert(`Filtrer par ${f}`)}
                 style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}
               >
                 <span style={{ fontSize: 11, color: NC.muted }}>{f}</span>
@@ -145,7 +146,7 @@ export function EmployeesDashboard() {
                   <StatusBadge status={emp.status} />
                 </td>
                 <td style={{ padding: 16 }}>
-                  <button data-cursor style={{ width: 28, height: 28, border: `1px solid ${NC.border}`, borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>
+                  <button onClick={() => alert(`Options pour ${emp.name}`)} data-cursor style={{ width: 28, height: 28, border: `1px solid ${NC.border}`, borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'none', backgroundColor: 'transparent' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                       <div style={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: NC.muted }} />
                       <div style={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: NC.muted }} />
@@ -162,13 +163,13 @@ export function EmployeesDashboard() {
         <div style={{ borderTop: `1px solid ${NC.border}`, padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontSize: 11, color: NC.muted }}>Affichage 1 – 8 sur 248 résultats</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <PageBtn label="‹" />
-            <PageBtn label="1" active />
-            <PageBtn label="2" />
-            <PageBtn label="3" />
+            <div onClick={() => alert('Page précédente')}><PageBtn label="‹" /></div>
+            <div onClick={() => alert('Page 1')}><PageBtn label="1" active /></div>
+            <div onClick={() => alert('Page 2')}><PageBtn label="2" /></div>
+            <div onClick={() => alert('Page 3')}><PageBtn label="3" /></div>
             <span style={{ padding: '0 4px', fontSize: 11, color: NC.mutedDim }}>…</span>
-            <PageBtn label="31" />
-            <PageBtn label="›" />
+            <div onClick={() => alert('Page 31')}><PageBtn label="31" /></div>
+            <div onClick={() => alert('Page suivante')}><PageBtn label="›" /></div>
           </div>
         </div>
       </NCCard>
@@ -263,7 +264,7 @@ function NCSectionLabel({ label }: { label: string }) {
       <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>
         {label}
       </span>
-      <button data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+      <button onClick={() => alert('Voir la liste complète...')} data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
         Voir tout
       </button>
     </div>

@@ -1,4 +1,5 @@
 // Recruitment Dashboard — job postings and candidate tracking
+import React from 'react';
 
 const NC = {
   bg:           '#EDF2F7',
@@ -26,19 +27,19 @@ const FONT_CLASH = "'Neue Montreal', 'Clash Display', sans-serif";
 
 export function RecruitmentDashboard() {
   const jobs = [
-    { id: 'JOB-301', title: 'Senior Frontend Engineer', dept: 'Engineering', type: 'Full-time', posted: '2024-05-15', applicants: 42, status: 'Active' },
-    { id: 'JOB-302', title: 'Product Designer', dept: 'Design', type: 'Full-time', posted: '2024-05-20', applicants: 28, status: 'Active' },
-    { id: 'JOB-303', title: 'Sales Development Rep', dept: 'Sales', type: 'Full-time', posted: '2024-05-10', applicants: 67, status: 'Active' },
-    { id: 'JOB-304', title: 'Data Analyst', dept: 'Analytics', type: 'Contract', posted: '2024-04-28', applicants: 19, status: 'Reviewing' },
-    { id: 'JOB-305', title: 'DevOps Engineer', dept: 'Engineering', type: 'Full-time', posted: '2024-05-22', applicants: 31, status: 'Active' },
+    { id: 'JOB-301', title: 'Développeur Senior Frontend', dept: 'Ingénierie', type: 'Temps plein', posted: '2024-05-15', applicants: 42, status: 'Actif' },
+    { id: 'JOB-302', title: 'Product Designer', dept: 'Design', type: 'Temps plein', posted: '2024-05-20', applicants: 28, status: 'Actif' },
+    { id: 'JOB-303', title: 'Commercial (SDR)', dept: 'Ventes', type: 'Temps plein', posted: '2024-05-10', applicants: 67, status: 'Actif' },
+    { id: 'JOB-304', title: 'Analyste Data', dept: 'Analytics', type: 'Contrat', posted: '2024-04-28', applicants: 19, status: 'En revue' },
+    { id: 'JOB-305', title: 'Ingénieur DevOps', dept: 'Ingénierie', type: 'Temps plein', posted: '2024-05-22', applicants: 31, status: 'Actif' },
   ];
 
   const candidates = [
-    { name: 'Emily Chen', position: 'Senior Frontend Engineer', stage: 'Final Round', score: 92, applied: '2024-05-18' },
-    { name: 'Marcus Johnson', position: 'Product Designer', stage: 'Phone Screen', score: 78, applied: '2024-05-21' },
-    { name: 'Sofia Rodriguez', position: 'Sales Development Rep', stage: 'Offer Sent', score: 88, applied: '2024-05-12' },
-    { name: 'Arjun Patel', position: 'Data Analyst', stage: 'Technical Test', score: 85, applied: '2024-05-01' },
-    { name: 'Olivia Kim', position: 'DevOps Engineer', stage: 'Culture Fit', score: 91, applied: '2024-05-23' },
+    { name: 'Emily Chen', position: 'Développeur Senior Frontend', stage: 'Entretien Final', score: 92, applied: '2024-05-18' },
+    { name: 'Marcus Johnson', position: 'Product Designer', stage: 'Appel Tél.', score: 78, applied: '2024-05-21' },
+    { name: 'Sofia Rodriguez', position: 'Commercial (SDR)', stage: 'Offre envoyée', score: 88, applied: '2024-05-12' },
+    { name: 'Arjun Patel', position: 'Analyste Data', stage: 'Test Technique', score: 85, applied: '2024-05-01' },
+    { name: 'Olivia Kim', position: 'Ingénieur DevOps', stage: 'Culture Fit', score: 91, applied: '2024-05-23' },
   ];
 
   return (
@@ -47,23 +48,27 @@ export function RecruitmentDashboard() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Recruitment Pipeline</h2>
-          <p style={{ fontSize: 11, color: NC.muted }}>Track open positions, candidates, and hiring progress</p>
+          <h2 style={{ fontFamily: FONT_CLASH, fontSize: 18, fontWeight: 700, color: NC.fg, marginBottom: 4, letterSpacing: '0.02em' }}>Pipeline de Recrutement</h2>
+          <p style={{ fontSize: 11, color: NC.muted }}>Suivez les postes ouverts, les candidats et la progression des recrutements</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <NCButton>Export Report</NCButton>
-          <NCButton primary>+ Create Job Posting</NCButton>
+          <div onClick={() => alert('Exportation du rapport de recrutement en cours...')}>
+            <NCButton>Exporter le rapport</NCButton>
+          </div>
+          <div onClick={() => alert('Ouverture du formulaire de création d\'offre...')}>
+            <NCButton primary>+ Créer une offre</NCButton>
+          </div>
         </div>
       </div>
 
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16 }}>
         {[
-          { label: 'Open Positions', value: '17' },
-          { label: 'Total Applicants', value: '187' },
-          { label: 'In Review', value: '43' },
-          { label: 'Interviews Scheduled', value: '12' },
-          { label: 'Offers Pending', value: '3' },
+          { label: 'Postes Ouverts', value: '17' },
+          { label: 'Candidats Totaux', value: '187' },
+          { label: 'En Revue', value: '43' },
+          { label: 'Entretiens Prévus', value: '12' },
+          { label: 'Offres en attente', value: '3' },
         ].map((stat) => (
           <NCCard key={stat.label} style={{ padding: '18px 20px' }}>
             <div style={{ fontSize: 10, color: NC.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{stat.label}</div>
@@ -75,16 +80,17 @@ export function RecruitmentDashboard() {
       {/* Job postings table */}
       <NCCard style={{ padding: 0 }}>
         <div style={{ borderBottom: `1px solid ${NC.border}`, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Active Job Postings</span>
+          <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>Offres d'Emploi Actives</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, height: 32, padding: '0 12px', gap: 8, width: 180 }}>
               <div style={{ width: 11, height: 11, borderRadius: '50%', border: `1.5px solid ${NC.mutedDim}` }} />
-              <span style={{ fontSize: 11, color: NC.mutedDim }}>Search jobs...</span>
+              <span style={{ fontSize: 11, color: NC.mutedDim }}>Rechercher une offre...</span>
             </div>
-            {['Department', 'Type', 'Status'].map((f) => (
+            {['Département', 'Type', 'Statut'].map((f) => (
               <button
                 key={f}
                 data-cursor
+                onClick={() => alert(`Filtrer par ${f}`)}
                 style={{ height: 32, padding: '0 12px', border: `1px solid ${NC.border}`, backgroundColor: '#F1F5F9', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 6, cursor: 'none' }}
               >
                 <span style={{ fontSize: 11, color: NC.muted }}>{f}</span>
@@ -97,7 +103,7 @@ export function RecruitmentDashboard() {
         <table style={{ width: '100%' }}>
           <thead style={{ borderBottom: `1px solid ${NC.border}`, backgroundColor: NC.bg }}>
             <tr>
-              {['Job ID', 'Position', 'Department', 'Type', 'Posted', 'Applicants', 'Status', 'Actions'].map((h) => (
+              {['ID', 'Poste', 'Département', 'Type', 'Publié le', 'Candidats', 'Statut', 'Actions'].map((h) => (
                 <th key={h} style={{ textAlign: 'left', padding: 16, fontSize: 10, color: NC.muted, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>{h}</th>
               ))}
             </tr>
@@ -126,8 +132,11 @@ export function RecruitmentDashboard() {
                   <JobStatusBadge status={job.status} />
                 </td>
                 <td style={{ padding: 16 }}>
-                  <button data-cursor style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>
-                    View
+                  <button 
+                    onClick={() => alert(`Détails de l'offre ${job.id}`)}
+                    data-cursor 
+                    style={{ padding: '0 12px', height: 26, border: `1px solid ${NC.border}`, borderRadius: 5, fontSize: 11, color: NC.muted, cursor: 'none', backgroundColor: 'transparent' }}>
+                    Voir
                   </button>
                 </td>
               </tr>
@@ -140,20 +149,20 @@ export function RecruitmentDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         {/* Pipeline stages */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Hiring Pipeline" />
+          <NCSectionLabel label="Tunnel de Recrutement" />
           <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { stage: 'Application Review', count: 43, pct: 23 },
-              { stage: 'Phone Screen', count: 28, pct: 15 },
-              { stage: 'Technical Assessment', count: 19, pct: 10 },
-              { stage: 'Culture Fit Interview', count: 15, pct: 8 },
-              { stage: 'Final Round', count: 8, pct: 4 },
-              { stage: 'Offer Sent', count: 3, pct: 2 },
+              { stage: 'Revue des candidatures', count: 43, pct: 23 },
+              { stage: 'Appel Téléphonique', count: 28, pct: 15 },
+              { stage: 'Test Technique', count: 19, pct: 10 },
+              { stage: 'Entretien Culture Fit', count: 15, pct: 8 },
+              { stage: 'Entretien Final', count: 8, pct: 4 },
+              { stage: 'Offre Envoyée', count: 3, pct: 2 },
             ].map((s) => (
               <div key={s.stage}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <span style={{ fontSize: 11, color: NC.fgDim }}>{s.stage}</span>
-                  <span style={{ fontSize: 10, color: NC.muted }}>{s.count} candidates</span>
+                  <span style={{ fontSize: 10, color: NC.muted }}>{s.count} candidats</span>
                 </div>
                 <div style={{ height: 6, width: '100%', backgroundColor: NC.accentBg, borderRadius: 3, position: 'relative', overflow: 'hidden' }}>
                   <div
@@ -167,7 +176,7 @@ export function RecruitmentDashboard() {
 
         {/* Top candidates */}
         <NCCard style={{ padding: 20 }}>
-          <NCSectionLabel label="Top Candidates" />
+          <NCSectionLabel label="Meilleurs Candidats" />
           <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {candidates.map((c, i) => (
               <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 10, paddingBottom: 12, borderBottom: i < candidates.length - 1 ? `1px solid ${NC.borderDim}` : 'none' }}>
@@ -190,15 +199,15 @@ export function RecruitmentDashboard() {
 
       {/* Recruitment funnel visualization */}
       <NCCard style={{ padding: 20 }}>
-        <NCSectionLabel label="Conversion Funnel" />
+        <NCSectionLabel label="Entonnoir de Conversion" />
         <div style={{ marginTop: 16, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12, height: 180 }}>
           {[
-            { label: 'Applications', value: 187, height: 100 },
-            { label: 'Screening', value: 116, height: 62 },
-            { label: 'Interviews', value: 62, height: 33 },
-            { label: 'Final Stage', value: 23, height: 12 },
-            { label: 'Offers', value: 11, height: 6 },
-            { label: 'Hired', value: 7, height: 4 },
+            { label: 'Candidatures', value: 187, height: 100 },
+            { label: 'Sélection', value: 116, height: 62 },
+            { label: 'Entretiens', value: 62, height: 33 },
+            { label: 'Phase Finale', value: 23, height: 12 },
+            { label: 'Offres', value: 11, height: 6 },
+            { label: 'Recrutés', value: 7, height: 4 },
           ].map((stage) => (
             <div key={stage.label} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
               <div style={{ fontSize: 11, color: NC.fgDim, fontWeight: 600 }}>{stage.value}</div>
@@ -249,8 +258,8 @@ function NCSectionLabel({ label }: { label: string }) {
       <span style={{ fontFamily: FONT_CLASH, fontSize: 12, fontWeight: 600, color: NC.fg, letterSpacing: '0.03em' }}>
         {label}
       </span>
-      <button data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-        See all
+      <button onClick={() => alert('Voir la liste complète...')} data-cursor style={{ height: 20, padding: '0 8px', border: `1px solid ${NC.border}`, borderRadius: 4, backgroundColor: 'transparent', fontSize: 9, color: NC.mutedDim, cursor: 'none', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+        Voir tout
       </button>
     </div>
   );
@@ -258,11 +267,11 @@ function NCSectionLabel({ label }: { label: string }) {
 
 function JobStatusBadge({ status }: { status: string }) {
   const styles: Record<string, { bg: string; border: string; color: string }> = {
-    Active: { bg: NC.greenBg, border: NC.green, color: NC.green },
-    Reviewing: { bg: '#FFFBEB', border: '#92400E', color: '#92400E' },
-    Closed: { bg: NC.redBg, border: NC.red, color: NC.red },
+    Actif: { bg: NC.greenBg, border: NC.green, color: NC.green },
+    'En revue': { bg: '#FFFBEB', border: '#92400E', color: '#92400E' },
+    Fermé: { bg: NC.redBg, border: NC.red, color: NC.red },
   };
-  const s = styles[status] ?? styles.Active;
+  const s = styles[status] ?? styles.Actif;
   return (
     <span style={{ display: 'inline-block', padding: '3px 8px', fontSize: 10, backgroundColor: s.bg, border: `1px solid ${s.border}`, borderRadius: 4, color: s.color, fontWeight: 600 }}>
       {status}
